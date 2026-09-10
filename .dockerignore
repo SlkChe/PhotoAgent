@@ -1,0 +1,40 @@
+# Исключаем файлы настроек Git и IDE
+.git
+.gitignore
+.vscode
+.idea
+
+# Исключаем локальные секреты и инструкции для ИИ-агентов
+.env
+.env.local
+.prompts/
+AGENTS.md
+
+# Исключаем виртуальные окружения и кэш Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.poetry
+.pypirc
+
+# Исключаем логи и результаты тестов
+*.log
+logs/
+.pytest_cache/
+.coverage
+htmlcov/
+flake8/
+
+# Исключаем файлы Docker, которые не нужны внутри самих контейнеров
+Dockerfile
+Dockerfile.*
+docker-compose.*
+.dockerignore
+README.md

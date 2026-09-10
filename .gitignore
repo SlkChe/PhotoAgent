@@ -1,0 +1,25 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+
+# Virtual environments
+.venv
+env/
+venv/
+
+# debuged logs
+*.log
+logs/
+
+# Streamlit secrets and local database
+secrets.toml
+
+# OS files and IDE
+.DS_Store
+.vscode
+
