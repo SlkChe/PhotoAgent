@@ -1,0 +1,4 @@
+-r core-api/requirements.txt
+-r streamlit-ui/requirements.txt
+ruff==0.16.7
+playwright==1.62.0

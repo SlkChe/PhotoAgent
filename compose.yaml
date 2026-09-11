@@ -1,0 +1,33 @@
+services:
+  core-api:
+    build:
+      context: .
+      dockerfile: docker/core-api.Dockerfile
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-8000}:8000"
+    environment:
+      PHOTO_API_SESSION_TTL_SECONDS: ${PHOTO_API_SESSION_TTL_SECONDS:-180}
+      PHOTO_API_CLEANUP_INTERVAL_SECONDS: ${PHOTO_API_CLEANUP_INTERVAL_SECONDS:-10}
+      PHOTO_API_MAX_SESSIONS: ${PHOTO_API_MAX_SESSIONS:-1000}
+      PHOTO_API_MAX_TURNS: ${PHOTO_API_MAX_TURNS:-100}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  streamlit-ui:
+    build:
+      context: .
+      dockerfile: docker/streamlit-ui.Dockerfile
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-8501}:8501"
+    environment:
+      PHOTO_UI_BACKEND_URL: http://core-api:8000
+      PHOTO_UI_PUBLIC_BACKEND_URL: ${PHOTO_UI_PUBLIC_BACKEND_URL:-http://127.0.0.1:8000}
+      PHOTO_UI_REQUEST_TIMEOUT_SECONDS: ${PHOTO_UI_REQUEST_TIMEOUT_SECONDS:-10}
+      PHOTO_UI_HEARTBEAT_SECONDS: ${PHOTO_UI_HEARTBEAT_SECONDS:-20}
+    depends_on:
+      core-api:
+        condition: service_healthy

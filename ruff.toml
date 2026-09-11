@@ -1,0 +1,9 @@
+target-version = "py314"
+line-length = 100
+src = ["core-api", "streamlit-ui", "."]
+
+[lint]
+select = ["E", "W", "N", "F", "I"]
+
+[lint.isort]
+known-first-party = ["photo_api", "photo_ui", "shared"]

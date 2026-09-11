@@ -1,0 +1,4 @@
+streamlit==1.63.0
+httpx==0.28.1
+pydantic==2.13.5
+pydantic-settings==2.15.0

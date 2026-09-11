@@ -33,7 +33,14 @@
 Проект построен по микросервисной архитектуре: каждый сервис independent,
 общается через HTTP API. Все сервисы разворачиваются через Docker Compose.
 
-Используй формат kebab-case (user-profile.py) для менования файлов!
+Соглашение об именовании:
+- Python-модули: `snake_case` (например, `user_profile.py`).
+- Каталоги импортируемых Python-пакетов: `snake_case` (например, `photo_agent/`).
+- Каталоги сервисов и документы: `kebab-case` (например, `core-api/`, `streamlit-ui/`, `code-style.md`).
+- Стандартные имена документов и файлов инструментов сохраняй: `README.md`, `AGENTS.md`, `SKILL.md`, `__init__.py`, `requirements.txt`.
+
+Принятые проектные решения фиксируй в `decisions.md`: дата, решение и область применения.
+В первых версиях `core-api` кеширование не используется. Правила кеширования UI описаны в `.prompts/frontend-rules.md`.
 
 ## Стек
 - Язык: Python 3.14
@@ -49,10 +56,13 @@
 ## Команды
 
 ### Локальная разработка (без Docker)
-- Установка зависимостей сервиса: 'pip install -r services/agent_service/requirements.txt'
+- Установка зависимостей сервиса (из корня репозитория): `pip install -r core-api/requirements.txt`
 - Линт всего репозитория: 'ruff check .'
 - Форматирование: 'ruff format .'
-- Todo!: [требуется описать команддные строки лдля запуска сервиса агента core-api и его web интерфейса streamlit-ui]
+- API: `PYTHONPATH=.:core-api python -m uvicorn photo_api.main:create_app --factory --host 127.0.0.1 --port 8000 --reload --no-access-log`.
+- UI: `PYTHONPATH=.:streamlit-ui python -m streamlit run streamlit-ui/app.py --server.address 127.0.0.1 --server.port 8501 --server.headless true --browser.gatherUsageStats false`. Перед запуском задай `PHOTO_UI_BACKEND_URL` и `PHOTO_UI_PUBLIC_BACKEND_URL` согласно `README.md`.
+- Для отладки API в IDE запускай модуль `uvicorn` с теми же аргументами, но без `--reload`; рабочая директория — корень репозитория.
+- Общая конфигурация Ruff находится в `ruff.toml`: правила `E`, `W`, `N`, `F`, `I`, Python 3.14.
 
 ### Docker Compose
 - Поднять всё: 'docker compose up -d'
@@ -62,9 +72,11 @@
 - Очистить volumes: 'docker compose down -v'
 
 ### Тесты
-- Все тесты: 'python -m discover -s tests -p "*_test.py"'
-- Тесты конкретного сервиса: 'python -m discover -s /core-api/tests -p "*_test.py"'
-- Один файл: 'python -m unittest core-api.tests.test_handler'
+Команды выполняются из корня репозитория.
+
+- Все тесты: `PYTHONPATH=.:core-api:streamlit-ui python -m unittest discover -s ./tests -p "*_test.py"`.
+- API: `PYTHONPATH=.:core-api:streamlit-ui python -m unittest discover -s ./tests -p "api_test.py"`.
+- UI: `PYTHONPATH=.:core-api:streamlit-ui python -m unittest discover -s ./tests -p "ui_test.py"`.
 
 
 # Ограничения и безопасность
@@ -84,16 +96,18 @@
 ## Как применять правила:
 - Изучи Code Style правила '.prompts/code-style.md' и соблюдай их!
 - ВСЕГДА и при любых задачах (бэкенд, фронтенд, скрипты) в первую очередь соблюдай правила безопасности, типизации и импорта креденшинов.
-- Если тебе назначена роль backend разработчика, строго следуй правилам из '.prompts/backend-rules.md'.
-- Если тебе назначена роль frontend разработчика, строго следуй правилам из '.prompts/frontend-rules.md'.
-- Если тебе назначена роль DevOps-инженерa или задача требует раоты с Docker-file, строго следуй правилам из '.prompts/docker-rules.md'.
+- Применяй профильные правила по затрагиваемой части проекта независимо от назначенной роли, в том числе при работе тимлидом.
+- Для бэкенда соблюдай `.prompts/backend-rules.md`.
+- Для фронтенда соблюдай `.prompts/frontend-rules.md`.
+- Для Dockerfile, Docker Compose и развёртывания соблюдай `.prompts/docker-rules.md`.
+- Если задача затрагивает несколько областей, соблюдай правила каждой из них.
 
 ## Запреты (нельзя никогда нарушать)
 - НЕЛЬЗЯ: редактировать '.env', '.env.local' файлы без согласования
 - НЕЛЬЗЯ: хардкодить API-ключи или секреты в коде
 - НЕЛЬЗЯ: удалять или переписывать существующие миграции БД
 - НЕЛЬЗЯ: устанавливать новые production-зависимости без согласования
-- НЕЛЬЗЯ использовать тип 'any'
+- НЕЛЬЗЯ использовать тип `typing.Any`. Встроенная функция `any()` разрешена.
 
 ## Всегда спрашивать перед выполнением
 - Команды 'rm' или удаления файлов (переносить в 'trash')
