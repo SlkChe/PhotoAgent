@@ -1,0 +1,14 @@
+@startuml "PhotoAgent C4-Context"
+!include <C4/C4_Context>
+title PhotoAgent MVP-1 — C4 Context (A-02 утверждена)
+Person(reader, "Фотограф / читатель", "Приватная сеть; группа до 30 человек; одновременно 2–3; анонимный диалог")
+System(photoagent, "PhotoAgent MVP-1", "Диалог, локальное понимание и поиск, ответ с источниками")
+System_Ext(search, "Поисковые MCP-серверы", "Поиск материалов и получение текста при поддержке")
+System_Ext(wiki, "Wiki-справочники", "Энциклопедические записи и связанные данные через API")
+System_Ext(llm, "Облачный генератор ответа", "Одна модель из конфигурации; прямой провайдер или агрегатор с фиксированной моделью")
+Rel(reader, photoagent, "Задаёт вопросы, читает ответы, оценивает, очищает диалог", "HTTPS")
+Rel(photoagent, search, "Ищет и получает материалы", "MCP / HTTPS")
+Rel(photoagent, wiki, "Ищет сущности и сведения", "HTTPS API")
+Rel(photoagent, llm, "Передаёт вопрос и доказательный контекст, получает ответ", "HTTPS API")
+SHOW_LEGEND()
+@enduml

@@ -1,0 +1,335 @@
+{
+  "description": "Синтетические примеры утверждённых контрактов, не результаты поиска. fixture_wiki — фиктивный зарегистрированный инструмент для проверки примера; это не выбранный провайдер.",
+  "query_analysis": {
+    "schema_version": "1.0",
+    "session_id": "11111111-1111-4111-8111-111111111111",
+    "request_id": "22222222-2222-4222-8222-222222222222",
+    "execution_id": "33333333-3333-4333-8333-333333333333",
+    "intent": "reference",
+    "dialogue_act": "ask",
+    "response_mode": "focused",
+    "topics": [
+      "works"
+    ],
+    "entities": [
+      {
+        "entity_id": "work-1",
+        "kind": "work",
+        "label": "Учебная серия",
+        "aliases": [],
+        "external_id": null
+      }
+    ],
+    "time_scope": null,
+    "geography": [],
+    "subquestions": [
+      {
+        "id": "q1",
+        "text": "Когда создана учебная серия?",
+        "intent": "reference",
+        "topics": [
+          "works"
+        ],
+        "entity_ids": [
+          "work-1"
+        ]
+      }
+    ],
+    "ambiguities": [],
+    "needs_clarification": false,
+    "clarification": null,
+    "in_scope": true,
+    "scope_status": "in_scope",
+    "excluded_parts": [],
+    "context_update": {
+      "base_revision": 0,
+      "subject_action": "replace",
+      "active_entity_ids": [
+        "work-1"
+      ],
+      "time_scope": null,
+      "geography": [],
+      "pending_action": null
+    }
+  },
+  "search_plan": {
+    "schema_version": "1.0",
+    "session_id": "11111111-1111-4111-8111-111111111111",
+    "request_id": "22222222-2222-4222-8222-222222222222",
+    "execution_id": "33333333-3333-4333-8333-333333333333",
+    "plan_id": "44444444-4444-4444-8444-444444444444",
+    "steps": [
+      {
+        "step_id": "step-1",
+        "subquestion_ids": [
+          "q1"
+        ],
+        "tool_id": "fixture_wiki",
+        "operation": "entity_lookup",
+        "queries": [
+          "Учебная серия"
+        ],
+        "languages": [
+          "ru"
+        ],
+        "preferred_source_types": [
+          "primary"
+        ],
+        "depends_on": [],
+        "input_source_ids": [],
+        "max_results": 2,
+        "timeout_ms": 5000
+      }
+    ],
+    "deadline_at": "2026-09-21T12:02:00Z",
+    "max_external_calls": 2,
+    "max_total_text_chars": 4000,
+    "max_evidence_fragments": 2
+  },
+  "evidence": {
+    "schema_version": "1.0",
+    "session_id": "11111111-1111-4111-8111-111111111111",
+    "request_id": "22222222-2222-4222-8222-222222222222",
+    "execution_id": "33333333-3333-4333-8333-333333333333",
+    "evidence_id": "55555555-5555-4555-8555-555555555555",
+    "plan_id": "44444444-4444-4444-8444-444444444444",
+    "sources": [
+      {
+        "source_id": "s1",
+        "url": "https://example.org/fixture-series",
+        "title": "Синтетический каталог для примера контракта",
+        "author_or_organization": "Учебный источник",
+        "published_date": null,
+        "retrieved_at": "2026-09-21T12:00:01Z",
+        "source_type": "primary",
+        "access_mode": "excerpt",
+        "provider_id": "fixture_wiki",
+        "origin_group": "fixture-origin",
+        "usage_constraints": [
+          "Синтетический пример, не исторический источник"
+        ]
+      }
+    ],
+    "fragments": [
+      {
+        "fragment_id": "f1",
+        "source_id": "s1",
+        "text": "Учебная серия создана в 2000 году.",
+        "locator": "Учебная запись 1",
+        "subquestion_ids": [
+          "q1"
+        ]
+      }
+    ],
+    "coverage": [
+      {
+        "subquestion_id": "q1",
+        "status": "sufficient",
+        "fragment_ids": [
+          "f1"
+        ]
+      }
+    ],
+    "conflicts": [],
+    "gaps": [],
+    "retrieval_status": "complete"
+  },
+  "answer": {
+    "schema_version": "1.0",
+    "session_id": "11111111-1111-4111-8111-111111111111",
+    "request_id": "22222222-2222-4222-8222-222222222222",
+    "execution_id": "33333333-3333-4333-8333-333333333333",
+    "answer_id": "66666666-6666-4666-8666-666666666666",
+    "kind": "answer",
+    "completeness": "complete",
+    "direct_answer": "Учебная серия создана в 2000 году.",
+    "sections": [],
+    "claims": [
+      {
+        "claim_id": "c1",
+        "statement": "Учебная серия создана в 2000 году.",
+        "status": "supported",
+        "fragment_ids": [
+          "f1"
+        ]
+      }
+    ],
+    "fragments": [
+      {
+        "fragment_id": "f1",
+        "source_id": "s1",
+        "text": "Учебная серия создана в 2000 году.",
+        "locator": "Учебная запись 1"
+      }
+    ],
+    "sources": [
+      {
+        "source_id": "s1",
+        "url": "https://example.org/fixture-series",
+        "title": "Синтетический каталог для примера контракта",
+        "author_or_organization": "Учебный источник",
+        "published_date": null,
+        "retrieved_at": "2026-09-21T12:00:01Z",
+        "source_type": "primary",
+        "access_mode": "excerpt",
+        "usage_constraints": [
+          "Синтетический пример, не исторический источник"
+        ]
+      }
+    ],
+    "limitations": [],
+    "clarification": null,
+    "follow_ups": [],
+    "style": {
+      "detail": "brief",
+      "level": "beginner"
+    }
+  },
+  "other_answer_kinds": [
+    {
+      "schema_version": "1.0",
+      "session_id": "11111111-1111-4111-8111-111111111111",
+      "request_id": "22222222-2222-4222-8222-000000000007",
+      "execution_id": "33333333-3333-4333-8333-000000000007",
+      "answer_id": "66666666-6666-4666-8666-000000000007",
+      "kind": "clarification",
+      "completeness": "not_applicable",
+      "direct_answer": "Какую серию вы имеете в виду?",
+      "sections": [],
+      "claims": [],
+      "fragments": [],
+      "sources": [],
+      "limitations": [],
+      "clarification": {
+        "id": "clar-1",
+        "question": "Какую серию вы имеете в виду?",
+        "options": []
+      },
+      "follow_ups": [],
+      "style": {
+        "detail": "brief",
+        "level": "beginner"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "session_id": "11111111-1111-4111-8111-111111111111",
+      "request_id": "22222222-2222-4222-8222-000000000008",
+      "execution_id": "33333333-3333-4333-8333-000000000008",
+      "answer_id": "66666666-6666-4666-8666-000000000008",
+      "kind": "out_of_scope",
+      "completeness": "not_applicable",
+      "direct_answer": "Подбор камеры для покупки не входит в MVP-1.",
+      "sections": [],
+      "claims": [],
+      "fragments": [],
+      "sources": [],
+      "limitations": [
+        "Могу объяснить устройство камеры в образовательном контексте."
+      ],
+      "clarification": null,
+      "follow_ups": [],
+      "style": {
+        "detail": "brief",
+        "level": "beginner"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "session_id": "11111111-1111-4111-8111-111111111111",
+      "request_id": "22222222-2222-4222-8222-000000000009",
+      "execution_id": "33333333-3333-4333-8333-000000000009",
+      "answer_id": "66666666-6666-4666-8666-000000000009",
+      "kind": "insufficient_evidence",
+      "completeness": "limited",
+      "direct_answer": "Не удалось найти источник с датой создания серии.",
+      "sections": [],
+      "claims": [],
+      "fragments": [],
+      "sources": [],
+      "limitations": [
+        "Дата создания не подтверждена найденными материалами."
+      ],
+      "clarification": null,
+      "follow_ups": [],
+      "style": {
+        "detail": "brief",
+        "level": "beginner"
+      }
+    }
+  ],
+  "busy_error": {
+    "schema_version": "1.0",
+    "code": "session_busy",
+    "message": "Запрос обрабатывается. Дождитесь ответа.",
+    "session_id": "11111111-1111-4111-8111-111111111111",
+    "request_id": "22222222-2222-4222-8222-000000000010",
+    "session_status": "in_progress",
+    "active_execution_id": "33333333-3333-4333-8333-333333333333"
+  },
+  "execution_accepted": {
+    "session_id": "11111111-1111-4111-8111-111111111111",
+    "request_id": "22222222-2222-4222-8222-222222222222",
+    "execution_id": "33333333-3333-4333-8333-333333333333",
+    "session_status": "in_progress"
+  },
+  "execution_completed": {
+    "schema_version": "1.0",
+    "session_id": "11111111-1111-4111-8111-111111111111",
+    "request_id": "22222222-2222-4222-8222-222222222222",
+    "execution_id": "33333333-3333-4333-8333-333333333333",
+    "status": "completed",
+    "answer": {
+      "schema_version": "1.0",
+      "session_id": "11111111-1111-4111-8111-111111111111",
+      "request_id": "22222222-2222-4222-8222-222222222222",
+      "execution_id": "33333333-3333-4333-8333-333333333333",
+      "answer_id": "66666666-6666-4666-8666-666666666666",
+      "kind": "answer",
+      "completeness": "complete",
+      "direct_answer": "Учебная серия создана в 2000 году.",
+      "sections": [],
+      "claims": [
+        {
+          "claim_id": "c1",
+          "statement": "Учебная серия создана в 2000 году.",
+          "status": "supported",
+          "fragment_ids": [
+            "f1"
+          ]
+        }
+      ],
+      "fragments": [
+        {
+          "fragment_id": "f1",
+          "source_id": "s1",
+          "text": "Учебная серия создана в 2000 году.",
+          "locator": "Учебная запись 1"
+        }
+      ],
+      "sources": [
+        {
+          "source_id": "s1",
+          "url": "https://example.org/fixture-series",
+          "title": "Синтетический каталог для примера контракта",
+          "author_or_organization": "Учебный источник",
+          "published_date": null,
+          "retrieved_at": "2026-09-21T12:00:01Z",
+          "source_type": "primary",
+          "access_mode": "excerpt",
+          "usage_constraints": [
+            "Синтетический пример, не исторический источник"
+          ]
+        }
+      ],
+      "limitations": [],
+      "clarification": null,
+      "follow_ups": [],
+      "style": {
+        "detail": "brief",
+        "level": "beginner"
+      }
+    },
+    "error": null
+  }
+}
