@@ -1,7 +1,7 @@
 {
   "description": "Синтетические примеры утверждённых контрактов, не результаты поиска. fixture_wiki — фиктивный зарегистрированный инструмент для проверки примера; это не выбранный провайдер.",
   "query_analysis": {
-    "schema_version": "1.0",
+    "schema_version": "1.1",
     "session_id": "11111111-1111-4111-8111-111111111111",
     "request_id": "22222222-2222-4222-8222-222222222222",
     "execution_id": "33333333-3333-4333-8333-333333333333",
@@ -50,10 +50,11 @@
       "time_scope": null,
       "geography": [],
       "pending_action": null
-    }
+    },
+    "locale": "ru"
   },
   "search_plan": {
-    "schema_version": "1.0",
+    "schema_version": "1.1",
     "session_id": "11111111-1111-4111-8111-111111111111",
     "request_id": "22222222-2222-4222-8222-222222222222",
     "execution_id": "33333333-3333-4333-8333-333333333333",
@@ -87,7 +88,7 @@
     "max_evidence_fragments": 2
   },
   "evidence": {
-    "schema_version": "1.0",
+    "schema_version": "1.1",
     "session_id": "11111111-1111-4111-8111-111111111111",
     "request_id": "22222222-2222-4222-8222-222222222222",
     "execution_id": "33333333-3333-4333-8333-333333333333",
@@ -135,7 +136,7 @@
     "retrieval_status": "complete"
   },
   "answer": {
-    "schema_version": "1.0",
+    "schema_version": "1.1",
     "session_id": "11111111-1111-4111-8111-111111111111",
     "request_id": "22222222-2222-4222-8222-222222222222",
     "execution_id": "33333333-3333-4333-8333-333333333333",
@@ -183,11 +184,12 @@
     "style": {
       "detail": "brief",
       "level": "beginner"
-    }
+    },
+    "locale": "ru"
   },
   "other_answer_kinds": [
     {
-      "schema_version": "1.0",
+      "schema_version": "1.1",
       "session_id": "11111111-1111-4111-8111-111111111111",
       "request_id": "22222222-2222-4222-8222-000000000007",
       "execution_id": "33333333-3333-4333-8333-000000000007",
@@ -209,10 +211,11 @@
       "style": {
         "detail": "brief",
         "level": "beginner"
-      }
+      },
+      "locale": "ru"
     },
     {
-      "schema_version": "1.0",
+      "schema_version": "1.1",
       "session_id": "11111111-1111-4111-8111-111111111111",
       "request_id": "22222222-2222-4222-8222-000000000008",
       "execution_id": "33333333-3333-4333-8333-000000000008",
@@ -232,10 +235,11 @@
       "style": {
         "detail": "brief",
         "level": "beginner"
-      }
+      },
+      "locale": "ru"
     },
     {
-      "schema_version": "1.0",
+      "schema_version": "1.1",
       "session_id": "11111111-1111-4111-8111-111111111111",
       "request_id": "22222222-2222-4222-8222-000000000009",
       "execution_id": "33333333-3333-4333-8333-000000000009",
@@ -255,11 +259,12 @@
       "style": {
         "detail": "brief",
         "level": "beginner"
-      }
+      },
+      "locale": "ru"
     }
   ],
   "busy_error": {
-    "schema_version": "1.0",
+    "schema_version": "1.1",
     "code": "session_busy",
     "message": "Запрос обрабатывается. Дождитесь ответа.",
     "session_id": "11111111-1111-4111-8111-111111111111",
@@ -274,13 +279,13 @@
     "session_status": "in_progress"
   },
   "execution_completed": {
-    "schema_version": "1.0",
+    "schema_version": "1.1",
     "session_id": "11111111-1111-4111-8111-111111111111",
     "request_id": "22222222-2222-4222-8222-222222222222",
     "execution_id": "33333333-3333-4333-8333-333333333333",
     "status": "completed",
     "answer": {
-      "schema_version": "1.0",
+      "schema_version": "1.1",
       "session_id": "11111111-1111-4111-8111-111111111111",
       "request_id": "22222222-2222-4222-8222-222222222222",
       "execution_id": "33333333-3333-4333-8333-333333333333",
@@ -328,8 +333,31 @@
       "style": {
         "detail": "brief",
         "level": "beginner"
-      }
+      },
+      "locale": "ru"
     },
     "error": null
+  },
+  "invitation_answer": {
+    "schema_version": "1.1",
+    "session_id": "11111111-1111-4111-8111-111111111111",
+    "request_id": "22222222-2222-4222-8222-000000000011",
+    "execution_id": "33333333-3333-4333-8333-000000000011",
+    "answer_id": "66666666-6666-4666-8666-000000000011",
+    "kind": "invitation",
+    "completeness": "not_applicable",
+    "direct_answer": "Какое направление или произведение фотографии вы хотите обсудить?",
+    "sections": [],
+    "claims": [],
+    "fragments": [],
+    "sources": [],
+    "limitations": [],
+    "clarification": null,
+    "follow_ups": [],
+    "style": {
+      "detail": "brief",
+      "level": "beginner"
+    },
+    "locale": "ru"
   }
 }
