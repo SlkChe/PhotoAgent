@@ -107,4 +107,4 @@ docker compose down
 
 Структура: `core-api/photo_api`, `streamlit-ui/photo_ui`, общие схемы `shared`,
 проверки `tests`, Dockerfile в `docker`.
-Концепт интерфейса: [docs/ui-concept.md](docs/ui-concept.md).
+Концепт интерфейса: [docs/ui/concept.md](docs/ui/concept.md).

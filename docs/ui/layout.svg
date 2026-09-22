@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-labelledby="title desc">
+  <title id="title">Ассистент фотографа — схема компоновки MVP-1</title>
+  <desc id="desc">Слева компактные настройки, в центре разговор с именем отвечающего ассистента, справа ссылки всего диалога. Внизу пояснения к первому экрану и развитию. Это схема, не финальный макет.</desc>
+  <style>text{font-family:Arial,sans-serif;fill:#25313c}.muted{fill:#63717b}.small{font-size:15px}.body{font-size:18px}.label{font-size:14px;letter-spacing:1px;fill:#536577}.heading{font-size:24px;font-weight:600}.link{fill:#315f91;font-size:17px}</style>
+  <rect width="1440" height="960" fill="#f6f7f8"/>
+  <text x="32" y="42" class="heading">Ассистент фотографа</text>
+  <text x="32" y="72" class="small muted">MVP-1 · Утверждённая схема с дополнениями · 22.09.2026</text>
+  <rect x="24" y="100" width="200" height="656" rx="12" fill="#edf0f3"/>
+  <rect x="240" y="100" width="814" height="656" rx="12" fill="white"/>
+  <rect x="1070" y="100" width="346" height="656" rx="12" fill="white"/>
+  <text x="44" y="140" class="label">ПРОСТРАНСТВО</text>
+  <text x="44" y="181" class="body">Текущий диалог</text>
+  <text x="44" y="242" class="label">ОБЪЯСНЕНИЕ</text>
+  <rect x="40" y="260" width="168" height="42" rx="7" fill="#dce6ef"/>
+  <text x="53" y="287" class="body">Кратко</text>
+  <text x="44" y="338" class="small">Для начинающего</text>
+  <text x="44" y="563" class="small">Сохранить диалог (.md)</text>
+  <text x="44" y="615" class="small muted">Диалог временный.</text>
+  <text x="44" y="638" class="small muted">Условия хранения</text>
+  <text x="44" y="714" class="body">Очистить диалог</text>
+  <text x="270" y="140" class="label">СЕЙЧАС ОТВЕЧАЕТ</text>
+  <text x="466" y="140" class="body">[Имя ассистента]</text>
+  <line x1="264" y1="161" x2="1030" y2="161" stroke="#e5e9ed"/>
+  <rect x="456" y="190" width="562" height="62" rx="12" fill="#f0f3f6"/>
+  <text x="480" y="227" class="body">Хочу поговорить с искусствоведом</text>
+  <text x="278" y="300" class="link">[Имя ассистента]</text>
+  <text x="278" y="338" class="body">Приглашение продолжить от выбранной роли.</text>
+  <text x="278" y="370" class="small muted">Обращение без вопроса тоже начинает разговор.</text>
+  <rect x="456" y="408" width="562" height="62" rx="12" fill="#f0f3f6"/>
+  <text x="480" y="445" class="body">Вопрос о произведениях и подходе автора</text>
+  <text x="278" y="514" class="link">[Имя ассистента]</text>
+  <text x="278" y="552" class="body">Объяснение с прямыми ссылками на материалы.</text>
+  <text x="278" y="584" class="link">Название материала ↗</text>
+  <text x="527" y="584" class="small muted">[1] → карточка справа</text>
+  <text x="278" y="614" class="small muted">Понравился · Не понравился</text>
+  <rect x="264" y="629" width="766" height="112" rx="12" fill="#f6f7f8" stroke="#c3cdd7"/>
+  <text x="286" y="655" class="body muted">Задайте вопрос или начните разговор</text>
+  <text x="286" y="681" class="small muted">4–7 строк · Затем прокрутка внутри поля</text>
+  <text x="286" y="707" class="small muted">Место для многострочной реплики</text>
+  <text x="927" y="725" class="link">Отправить</text>
+  <text x="1094" y="140" font-size="22" font-weight="600">Источники диалога</text>
+  <text x="1094" y="180" class="small muted">Сохранить источники (.md) ↓</text>
+  <rect x="1090" y="208" width="302" height="140" rx="8" fill="#f4f6f8"/>
+  <text x="1106" y="240" class="link">1. Название материала ↗</text>
+  <text x="1106" y="271" class="small muted">Контекст: тема исходного вопроса</text>
+  <text x="1106" y="317" class="link">Меню карточки ···</text>
+  <rect x="1090" y="364" width="302" height="140" rx="8" fill="#f4f6f8"/>
+  <text x="1106" y="396" class="link">2. Другой материал ↗</text>
+  <text x="1106" y="427" class="small muted">Контекст: тема исходного вопроса</text>
+  <text x="1106" y="473" class="link">Меню карточки ···</text>
+  <text x="1094" y="567" class="small muted">Меню: Перейти к диалогу</text>
+  <text x="1094" y="592" class="small muted">→ к первичному ответу</text>
+  <text x="1094" y="617" class="small muted">Открыть ссылку → новая вкладка</text>
+  <text x="1094" y="655" class="small muted">Повторы не создают карточки.</text>
+  <text x="32" y="806" class="label">ПЕРВЫЙ ЭКРАН</text>
+  <text x="32" y="841" class="heading">О чём поговорим сегодня?</text>
+  <text x="32" y="871" class="small muted">Без имени и иконки. После реплики роль определяет backend.</text>
+  <text x="750" y="806" class="label">РАЗВИТИЕ ПОСЛЕ MVP-1</text>
+  <text x="750" y="841" class="body">Кабинет слева · Изображения в разговоре</text>
+  <text x="750" y="871" class="small muted">История, профиль, избранные серии, альбомы и книги.</text>
+  <text x="32" y="928" class="small muted">Имена, содержание ответов и карточек условны. Персонажи и аватары не проектируются.</text>
+</svg>
