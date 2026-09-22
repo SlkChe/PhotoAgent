@@ -27,3 +27,4 @@ secrets.toml
 # OS files and IDE
 .DS_Store
 .vscode
+tasks.md
