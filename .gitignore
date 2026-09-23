@@ -29,3 +29,5 @@ secrets.toml
 .DS_Store
 .vscode
 tasks.md
+# Локальные технические журналы обмена между участниками
+decisions.md
