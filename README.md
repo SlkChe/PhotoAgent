@@ -65,6 +65,12 @@ python scripts/browser_check.py --ui-url http://127.0.0.1:8501 --api-url http://
 
 ## Docker Compose
 
+Для локального Dev с HTTPS, контейнерного Stage и изолированного LiteLLM
+используйте [инструкцию стенда на Mac](docs/deployment/local-mac.md).
+Результаты проверок и оставшиеся условия приёмки —
+[D-01/D-05](docs/mvp-1/deployment-checks.md).
+Команды ниже сохраняют прежний запуск прототипа без ingress.
+
 ```bash
 docker compose up -d --build
 docker compose logs -f core-api

@@ -1,0 +1,11 @@
+{
+    admin off
+    auto_https off
+    log default {
+        level ERROR
+        output discard
+    }
+}
+:8080 {
+    reverse_proxy litellm:4000
+}

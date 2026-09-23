@@ -20,6 +20,7 @@ logs/
 # Локальные файлы переменных окружения
 .env
 .env.local
+/.devsec/
 
 # Streamlit secrets and local database
 secrets.toml

@@ -1,0 +1,54 @@
+{
+    admin off
+    auto_https off
+    https_port 8443
+    log default {
+        level ERROR
+        output discard
+    }
+}
+
+https://photoagent-dev.home.arpa {
+    tls /certs/dev/server.crt /certs/dev/server.key
+    handle /health {
+        reverse_proxy host.docker.internal:8000
+    }
+    # Только браузерный сигнал прототипа; маршруты MVP-1 добавляются после B-02.
+    @close {
+        method POST
+        path_regexp close ^/sessions/[0-9a-fA-F-]{36}/close$
+        header Origin https://photoagent-dev.home.arpa
+    }
+    handle @close {
+        reverse_proxy host.docker.internal:8000
+    }
+    @private path /sessions /sessions/* /docs /docs/* /redoc /openapi.json
+    handle @private {
+        respond 404
+    }
+    handle {
+        reverse_proxy host.docker.internal:8501
+    }
+}
+
+https://photoagent-stage.home.arpa {
+    tls /certs/stage/server.crt /certs/stage/server.key
+    handle /health {
+        reverse_proxy stage-api:8000
+    }
+    @close {
+        method POST
+        path_regexp close ^/sessions/[0-9a-fA-F-]{36}/close$
+        header Origin https://photoagent-stage.home.arpa
+    }
+    handle @close {
+        reverse_proxy stage-api:8000
+    }
+    @private path /sessions /sessions/* /docs /docs/* /redoc /openapi.json
+    handle @private {
+        respond 404
+    }
+    handle {
+        reverse_proxy stage-ui:8501
+    }
+}

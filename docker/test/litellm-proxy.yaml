@@ -1,0 +1,13 @@
+# Исследовательская конфигурация штатного proxy, не production-маршрутизация.
+model_list:
+  - model_name: fixture
+    litellm_params:
+      model: openai/test-model
+      mock_response: '{"text":"Тестовый ответ"}'
+litellm_settings:
+  telemetry: false
+  set_verbose: false
+  turn_off_message_logging: true
+  num_retries: 0
+general_settings:
+  disable_spend_logs: true

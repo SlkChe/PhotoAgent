@@ -91,28 +91,65 @@ UI-спецификацию, правила разработки и задачи
 
 ## Организация среды разработки и тестирования
 
-### Локальная разработка (без Docker)
-- Установка зависимостей сервиса (из корня репозитория): `pip install -r core-api/requirements.txt`
-- Линт всего репозитория: 'ruff check .'
-- Форматирование: 'ruff format .'
-- API: `PYTHONPATH=.:core-api python -m uvicorn photo_api.main:create_app --factory --host 127.0.0.1 --port 8000 --reload --no-access-log`.
-- UI: `PYTHONPATH=.:streamlit-ui python -m streamlit run streamlit-ui/app.py --server.address 127.0.0.1 --server.port 8501 --server.headless true --browser.gatherUsageStats false`. Перед запуском задай `PHOTO_UI_BACKEND_URL` и `PHOTO_UI_PUBLIC_BACKEND_URL` согласно `README.md`.
-- Для отладки API в IDE запускай модуль `uvicorn` с теми же аргументами, но без `--reload`; рабочая директория — корень репозитория.
-- Общая конфигурация Ruff находится в `ruff.toml`: правила `E`, `W`, `N`, `F`, `I`, Python 3.14.
+Основная инструкция: [Dev и Stage на Mac](docs/deployment/local-mac.md).
+В ней описаны предварительная настройка Docker/DNS/TLS, команды сборки, запуска,
+остановки и диагностики. Результаты и ограничения текущего стенда —
+[протокол D-01/D-05](docs/mvp-1/deployment-checks.md).
+Все команды ниже выполняются из корня репозитория.
 
-### Docker Compose
-- Поднять всё: 'docker compose up -d'
-- Пересобрать и поднять: 'docker compose up -d --build'
-- Остановить: 'docker compose down'
-- Логи конкретного сервиса: 'docker compose logs -f core-api'
-- Очистить volumes: 'docker compose down -v'
+| Среда | Способ запуска | Точка входа / инструкция |
+|---|---|---|
+| Dev | Локальные API/UI в Python-окружении; Caddy ingress в Docker | `https://photoagent-dev.home.arpa`, [запуск Dev](docs/deployment/local-mac.md#запуск-dev) |
+| Stage | API/UI в Docker Compose, общий с Dev HTTPS ingress | `https://photoagent-stage.home.arpa`, [запуск Stage](docs/deployment/local-mac.md#запуск-stage) |
+| Тестовый LiteLLM | Отдельный Compose-проект и профиль `test`, без облачных вызовов | `http://127.0.0.1:4000/v1`, [инструкция D-05](docs/deployment/local-mac.md#d-05-изолированный-litellm) |
+| Prod | Будущий VPS; аренда и развёртывание отложены | [Требования к VPS](docs/mvp-1/deployment-review.md#требования-к-vps-которые-нужно-собрать) |
+
+### Подготовка и локальная разработка
+
+- Python 3.14, окружение `.venv/runtime-env`; первичная подготовка —
+  [README](README.md#локальный-запуск). Для работы с обоими сервисами и проверками:
+  `.venv/runtime-env/bin/python -m pip install -r requirements-dev.txt`.
+- API: `.venv/runtime-env/bin/python scripts/run_dev.py api`.
+- UI в другом терминале: `.venv/runtime-env/bin/python scripts/run_dev.py ui`.
+- HTTPS ingress: `docker compose -f docker/compose.local.yaml up -d ingress`.
+  Docker Desktop должен быть запущен, сертификаты и доверие CA подготовлены
+  по основной инструкции. Rosetta для текущих ARM64-образов не требуется.
+- `run_dev.py` задаёт адреса UI/API и ограничивает передаваемое окружение.
+  Файл `.devsec/.env.local` автоматически не загружается.
+- Для отладки API в IDE используй Python из `.venv/runtime-env`, модуль `uvicorn`,
+  аргументы `photo_api.main:create_app --factory --host 127.0.0.1 --port 8000 --no-access-log`,
+  `PYTHONPATH=.:core-api`; рабочая директория — корень репозитория. Не запускай второй
+  API на уже занятом порту. `--reload` допустим для разработки, но теряет RAM-сессии
+  при перезапуске и не используется для приёмочных проверок жизненного цикла.
+
+### Docker Compose и остановка
+
+- Для Stage используй `-f docker/compose.local.yaml --profile stage`, для mock —
+  `-f docker/compose.test.yaml --profile test`; точные команды — в основной инструкции.
+- Корневой `compose.yaml` и команды `docker compose up -d --build` /
+  `docker compose down` сохраняют прежний контейнерный запуск прототипа без HTTPS.
+  Они не управляют новыми стендами; порты по умолчанию конфликтуют с локальным Dev.
+- Остановка только Stage: `docker compose -f docker/compose.local.yaml --profile stage stop stage-ui stage-api`.
+  Команда `down` этого Compose-проекта остановит также общий ingress Dev/Stage.
+  Локальные API/UI останавливаются отдельно через `Ctrl+C` в их терминалах.
+- Удаление томов, в том числе через `down -v`, допускается только после согласования
+  с владельцем. Обычная остановка стенда не должна удалять данные.
 
 ### Тесты
-Команды выполняются из корня репозитория.
 
-- Все тесты: `PYTHONPATH=.:core-api:streamlit-ui python -m unittest discover -s ./tests -p "*_test.py"`.
-- API: `PYTHONPATH=.:core-api:streamlit-ui python -m unittest discover -s ./tests -p "api_test.py"`.
-- UI: `PYTHONPATH=.:core-api:streamlit-ui python -m unittest discover -s ./tests -p "ui_test.py"`.
+- Все тесты приложения: `PYTHONPATH=.:core-api:streamlit-ui .venv/runtime-env/bin/python -m unittest discover -s ./tests -p '*_test.py'`.
+  Для API/UI замени шаблон соответственно на `api_test.py` / `ui_test.py`.
+- HTTPS и WebSocket обоих окружений: `.venv/runtime-env/bin/python scripts/check_https.py`.
+  Требуются работающие Dev и Stage, Chrome и доверенный CA в macOS.
+- HTTP-сценарии mock: `.venv/runtime-env/bin/python scripts/check_mock.py`.
+  Требуется запущенный профиль `test`; проверка сбрасывает счётчик стенда,
+  не запускай её одновременно с чужими клиентскими тестами того же mock.
+- Линт: `.venv/runtime-env/bin/ruff check .`.
+- Проверка форматирования: `.venv/runtime-env/bin/ruff format --check .`;
+  применение форматирования: `.venv/runtime-env/bin/ruff format .`.
+- Общая конфигурация Ruff — `ruff.toml`: правила `E`, `W`, `N`, `F`, `I`, Python 3.14.
+- Успешная проверка HTTPS-стенда с прототипом не закрывает B-02 и приёмку MVP-1;
+  ограничения и непроверенные среды фиксируются в протоколе D-01/D-05.
 
 
 # Ограничения и безопасность
@@ -141,6 +178,11 @@ UI-спецификацию, правила разработки и задачи
 ## Запреты (нельзя никогда нарушать)
 - НЕЛЬЗЯ: редактировать '.env', '.env.local' файлы без согласования
 - НЕЛЬЗЯ: хардкодить API-ключи или секреты в коде
+- Локальное исключение, утверждённое владельцем: секреты приложения Dev допускаются
+  в `.devsec/.env.local`, ключи локального HTTPS для Dev/Stage на Mac — в
+  `.devsec/ssl/`. Вся `.devsec/` исключается из Git и Docker-контекста; права и
+  порядок доступа определены в `.prompts/code-style.md`. На секреты приложения
+  Stage/Prod и TLS будущего VPS исключение не распространяется.
 - НЕЛЬЗЯ: удалять или переписывать существующие миграции БД
 - НЕЛЬЗЯ: устанавливать новые production-зависимости без согласования
 - НЕЛЬЗЯ использовать тип `typing.Any`. Встроенная функция `any()` разрешена.

@@ -1,0 +1,50 @@
+name: photoagent-test
+
+services:
+  litellm:
+    profiles: [test]
+    image: ghcr.io/berriai/litellm:v1.102.1@sha256:87f34979b9f8cb274fac90ca8a4fdda07d8480de22755562a26adeb95ce20d02
+    entrypoint: ["python", "-m", "uvicorn"]
+    command: ["litellm_mock.app:app", "--app-dir", "/test", "--host", "0.0.0.0", "--port", "4000", "--workers", "1", "--no-access-log", "--log-level", "critical"]
+    volumes:
+      - ./test/litellm_mock:/test/litellm_mock:ro
+      - ../tests/fixtures/llm-draft.json:/fixtures/llm-draft.json:ro
+    environment:
+      LITELLM_LOCAL_MODEL_COST_MAP: "True"
+      LITELLM_TELEMETRY: "False"
+      DO_NOT_TRACK: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+    user: "10001:10001"
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    networks: [mock]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:4000/health', timeout=3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 12
+      start_period: 30s
+
+  mock-relay:
+    profiles: [test]
+    image: caddy:2.11.2-alpine@sha256:834468128c7696cec0ceea6172f7d692daf645ae51983ca76e39da54a97c570d
+    command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
+    volumes:
+      - ./test/mock-relay.Caddyfile:/etc/caddy/Caddyfile:ro
+    ports:
+      - "127.0.0.1:4000:8080"
+    networks: [mock, access]
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    security_opt: [no-new-privileges:true]
+    depends_on:
+      litellm:
+        condition: service_healthy
+
+networks:
+  mock:
+    internal: true
+  access:
