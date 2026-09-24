@@ -10,6 +10,28 @@
 
 https://photoagent-dev.home.arpa {
     tls /certs/dev/server.crt /certs/dev/server.key
+    @probe_context {
+        method GET
+        path /f01/browser/context
+    }
+    handle @probe_context {
+        reverse_proxy host.docker.internal:8001
+    }
+    @probe_mutation {
+        method POST
+        path /f01/browser/create /f01/browser/opened /f01/browser/marker /f01/browser/clear
+    }
+    handle @probe_mutation {
+        reverse_proxy host.docker.internal:8001
+    }
+    @probe_ui path /f01/ui /f01/ui/*
+    handle @probe_ui {
+        reverse_proxy host.docker.internal:8503
+    }
+    @probe_private path /f01 /f01/*
+    handle @probe_private {
+        respond 404
+    }
     handle /health {
         reverse_proxy host.docker.internal:8000
     }
