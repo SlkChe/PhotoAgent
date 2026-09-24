@@ -1,0 +1,1113 @@
+{
+  "status": "draft-not-approved",
+  "examples": [
+    {
+      "id": "browser-context",
+      "model": "BrowserContext",
+      "payload": {
+        "contract_version": "mvp1-http-draft.1",
+        "session_id": null,
+        "csrf_token": "synthetic-csrf"
+      },
+      "note": ""
+    },
+    {
+      "id": "create-open-clear",
+      "model": "OperationRequest",
+      "payload": {
+        "request_id": "22222222-2222-4222-8222-222222222222"
+      },
+      "note": "Три разные операции используют разные ID; здесь пример формы тела."
+    },
+    {
+      "id": "snapshot-completed",
+      "model": "SessionSnapshot",
+      "payload": {
+        "contract_version": "mvp1-http-draft.1",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "revision": 3,
+        "last_activity_at": "2026-09-24T10:00:00Z",
+        "expires_at": "2026-09-24T22:00:00Z",
+        "settings_revision": 0,
+        "settings": {
+          "detail": "brief",
+          "level": "beginner",
+          "locale": "ru"
+        },
+        "current_role": {
+          "role_id": "friend",
+          "display_name": "Друг"
+        },
+        "session_status": "ready",
+        "active_execution_id": null,
+        "pending_clarification": null,
+        "messages": [
+          {
+            "kind": "user",
+            "message_id": "00000000-0000-0000-0000-000000000064",
+            "created_at": "2026-09-24T10:00:00Z",
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "execution_id": "33333333-3333-4333-8333-333333333333",
+            "text": "Когда создан и впервые опубликован этот снимок?",
+            "settings": {
+              "detail": "brief",
+              "level": "beginner",
+              "locale": "ru"
+            }
+          },
+          {
+            "kind": "assistant",
+            "message_id": "00000000-0000-0000-0000-000000000065",
+            "created_at": "2026-09-24T10:00:00Z",
+            "author": {
+              "role_id": "friend",
+              "display_name": "Друг"
+            },
+            "answer": {
+              "schema_version": "1.1",
+              "session_id": "11111111-1111-4111-8111-111111111111",
+              "request_id": "22222222-2222-4222-8222-222222222222",
+              "execution_id": "33333333-3333-4333-8333-333333333333",
+              "answer_id": "66666666-6666-4666-8666-666666666666",
+              "kind": "answer",
+              "completeness": "complete",
+              "direct_answer": "Учебная серия создана в 2000 году.",
+              "sections": [],
+              "claims": [
+                {
+                  "claim_id": "c1",
+                  "statement": "Учебная серия создана в 2000 году.",
+                  "status": "supported",
+                  "fragment_ids": [
+                    "f1"
+                  ]
+                }
+              ],
+              "fragments": [
+                {
+                  "fragment_id": "f1",
+                  "source_id": "s1",
+                  "text": "Учебная серия создана в 2000 году.",
+                  "locator": "Учебная запись 1"
+                }
+              ],
+              "sources": [
+                {
+                  "source_id": "s1",
+                  "url": "https://example.org/fixture-series",
+                  "title": "Синтетический каталог для примера контракта",
+                  "author_or_organization": "Учебный источник",
+                  "published_date": null,
+                  "retrieved_at": "2026-09-21T12:00:01Z",
+                  "source_type": "primary",
+                  "access_mode": "excerpt",
+                  "usage_constraints": [
+                    "Синтетический пример, не исторический источник"
+                  ]
+                }
+              ],
+              "limitations": [],
+              "clarification": null,
+              "follow_ups": [],
+              "style": {
+                "detail": "brief",
+                "level": "beginner"
+              },
+              "locale": "ru"
+            }
+          }
+        ],
+        "executions": [
+          {
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "execution_id": "33333333-3333-4333-8333-333333333333",
+            "status": "completed",
+            "answer_id": "66666666-6666-4666-8666-666666666666",
+            "error": null
+          }
+        ],
+        "source_cards": [
+          {
+            "card_id": "00000000-0000-0000-0000-0000000000c8",
+            "source": {
+              "source_id": "s1",
+              "url": "https://example.org/fixture-series",
+              "title": "Синтетический каталог для примера контракта",
+              "author_or_organization": "Учебный источник",
+              "published_date": null,
+              "retrieved_at": "2026-09-21T12:00:01Z",
+              "source_type": "primary",
+              "access_mode": "excerpt",
+              "usage_constraints": [
+                "Синтетический пример, не исторический источник"
+              ]
+            },
+            "first_answer_id": "66666666-6666-4666-8666-666666666666",
+            "first_message_id": "00000000-0000-0000-0000-000000000065",
+            "context_comment": "Когда создан и впервые опубликован этот снимок?"
+          }
+        ],
+        "answer_states": [
+          {
+            "answer_id": "66666666-6666-4666-8666-666666666666",
+            "eligible": true,
+            "shown": false,
+            "feedback_revision": 0,
+            "rating": "no_feedback",
+            "comment": null
+          }
+        ],
+        "capabilities": {
+          "max_message_chars": 4000,
+          "max_feedback_comment_chars": 1000,
+          "can_export_dialogue": true,
+          "can_export_sources": true
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "snapshot-empty",
+      "model": "SessionSnapshot",
+      "payload": {
+        "contract_version": "mvp1-http-draft.1",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "revision": 0,
+        "last_activity_at": "2026-09-24T10:00:00Z",
+        "expires_at": "2026-09-24T22:00:00Z",
+        "settings_revision": 0,
+        "settings": {
+          "detail": "brief",
+          "level": "beginner",
+          "locale": "ru"
+        },
+        "current_role": {
+          "role_id": "friend",
+          "display_name": "Друг"
+        },
+        "session_status": "ready",
+        "active_execution_id": null,
+        "pending_clarification": null,
+        "messages": [],
+        "executions": [],
+        "source_cards": [],
+        "answer_states": [],
+        "capabilities": {
+          "max_message_chars": 4000,
+          "max_feedback_comment_chars": 1000,
+          "can_export_dialogue": false,
+          "can_export_sources": false
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "snapshot-in-progress",
+      "model": "SessionSnapshot",
+      "payload": {
+        "contract_version": "mvp1-http-draft.1",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "revision": 1,
+        "last_activity_at": "2026-09-24T10:00:00Z",
+        "expires_at": "2026-09-24T22:00:00Z",
+        "settings_revision": 0,
+        "settings": {
+          "detail": "brief",
+          "level": "beginner",
+          "locale": "ru"
+        },
+        "current_role": {
+          "role_id": "friend",
+          "display_name": "Друг"
+        },
+        "session_status": "in_progress",
+        "active_execution_id": "33333333-3333-4333-8333-333333333333",
+        "pending_clarification": null,
+        "messages": [
+          {
+            "kind": "user",
+            "message_id": "00000000-0000-0000-0000-000000000064",
+            "created_at": "2026-09-24T10:00:00Z",
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "execution_id": "33333333-3333-4333-8333-333333333333",
+            "text": "Когда создан и впервые опубликован этот снимок?",
+            "settings": {
+              "detail": "brief",
+              "level": "beginner",
+              "locale": "ru"
+            }
+          }
+        ],
+        "executions": [
+          {
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "execution_id": "33333333-3333-4333-8333-333333333333",
+            "status": "searching",
+            "answer_id": null,
+            "error": null
+          }
+        ],
+        "source_cards": [],
+        "answer_states": [],
+        "capabilities": {
+          "max_message_chars": 4000,
+          "max_feedback_comment_chars": 1000,
+          "can_export_dialogue": true,
+          "can_export_sources": false
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "snapshot-failed",
+      "model": "SessionSnapshot",
+      "payload": {
+        "contract_version": "mvp1-http-draft.1",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "revision": 1,
+        "last_activity_at": "2026-09-24T10:00:00Z",
+        "expires_at": "2026-09-24T22:00:00Z",
+        "settings_revision": 0,
+        "settings": {
+          "detail": "brief",
+          "level": "beginner",
+          "locale": "ru"
+        },
+        "current_role": {
+          "role_id": "friend",
+          "display_name": "Друг"
+        },
+        "session_status": "ready",
+        "active_execution_id": null,
+        "pending_clarification": null,
+        "messages": [
+          {
+            "kind": "user",
+            "message_id": "00000000-0000-0000-0000-000000000064",
+            "created_at": "2026-09-24T10:00:00Z",
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "execution_id": "33333333-3333-4333-8333-333333333333",
+            "text": "Когда создан и впервые опубликован этот снимок?",
+            "settings": {
+              "detail": "brief",
+              "level": "beginner",
+              "locale": "ru"
+            }
+          }
+        ],
+        "executions": [
+          {
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "execution_id": "33333333-3333-4333-8333-333333333333",
+            "status": "failed",
+            "answer_id": null,
+            "error": {
+              "code": "provider_error",
+              "message": "Источник временно недоступен",
+              "retryable": true
+            }
+          }
+        ],
+        "source_cards": [],
+        "answer_states": [],
+        "capabilities": {
+          "max_message_chars": 4000,
+          "max_feedback_comment_chars": 1000,
+          "can_export_dialogue": true,
+          "can_export_sources": false
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "snapshot-awaiting-clarification",
+      "model": "SessionSnapshot",
+      "payload": {
+        "contract_version": "mvp1-http-draft.1",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "revision": 3,
+        "last_activity_at": "2026-09-24T10:00:00Z",
+        "expires_at": "2026-09-24T22:00:00Z",
+        "settings_revision": 0,
+        "settings": {
+          "detail": "brief",
+          "level": "beginner",
+          "locale": "ru"
+        },
+        "current_role": {
+          "role_id": "friend",
+          "display_name": "Друг"
+        },
+        "session_status": "awaiting_clarification",
+        "active_execution_id": null,
+        "pending_clarification": {
+          "answer_id": "66666666-6666-4666-8666-666666666666",
+          "clarification_id": "clar-1",
+          "question": "Какую серию вы имеете в виду?",
+          "options": []
+        },
+        "messages": [
+          {
+            "kind": "user",
+            "message_id": "00000000-0000-0000-0000-000000000064",
+            "created_at": "2026-09-24T10:00:00Z",
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "execution_id": "33333333-3333-4333-8333-333333333333",
+            "text": "Когда создан и впервые опубликован этот снимок?",
+            "settings": {
+              "detail": "brief",
+              "level": "beginner",
+              "locale": "ru"
+            }
+          },
+          {
+            "kind": "assistant",
+            "message_id": "00000000-0000-0000-0000-000000000065",
+            "created_at": "2026-09-24T10:00:00Z",
+            "author": {
+              "role_id": "friend",
+              "display_name": "Друг"
+            },
+            "answer": {
+              "schema_version": "1.1",
+              "session_id": "11111111-1111-4111-8111-111111111111",
+              "request_id": "22222222-2222-4222-8222-222222222222",
+              "execution_id": "33333333-3333-4333-8333-333333333333",
+              "answer_id": "66666666-6666-4666-8666-666666666666",
+              "kind": "clarification",
+              "completeness": "not_applicable",
+              "direct_answer": "Какую серию вы имеете в виду?",
+              "sections": [],
+              "claims": [],
+              "fragments": [],
+              "sources": [],
+              "limitations": [],
+              "clarification": {
+                "id": "clar-1",
+                "question": "Какую серию вы имеете в виду?",
+                "options": []
+              },
+              "follow_ups": [],
+              "style": {
+                "detail": "brief",
+                "level": "beginner"
+              },
+              "locale": "ru"
+            }
+          }
+        ],
+        "executions": [
+          {
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "execution_id": "33333333-3333-4333-8333-333333333333",
+            "status": "completed",
+            "answer_id": "66666666-6666-4666-8666-666666666666",
+            "error": null
+          }
+        ],
+        "source_cards": [],
+        "answer_states": [
+          {
+            "answer_id": "66666666-6666-4666-8666-666666666666",
+            "eligible": false,
+            "shown": false,
+            "feedback_revision": 0,
+            "rating": "no_feedback",
+            "comment": null
+          }
+        ],
+        "capabilities": {
+          "max_message_chars": 4000,
+          "max_feedback_comment_chars": 1000,
+          "can_export_dialogue": true,
+          "can_export_sources": false
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "snapshot-second-role-same-url",
+      "model": "SessionSnapshot",
+      "payload": {
+        "contract_version": "mvp1-http-draft.1",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "revision": 6,
+        "last_activity_at": "2026-09-24T10:00:00Z",
+        "expires_at": "2026-09-24T22:00:00Z",
+        "settings_revision": 0,
+        "settings": {
+          "detail": "brief",
+          "level": "beginner",
+          "locale": "ru"
+        },
+        "current_role": {
+          "role_id": "art_historian",
+          "display_name": "Искусствовед"
+        },
+        "session_status": "ready",
+        "active_execution_id": null,
+        "pending_clarification": null,
+        "messages": [
+          {
+            "kind": "user",
+            "message_id": "00000000-0000-0000-0000-000000000064",
+            "created_at": "2026-09-24T10:00:00Z",
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "execution_id": "33333333-3333-4333-8333-333333333333",
+            "text": "Когда создан и впервые опубликован этот снимок?",
+            "settings": {
+              "detail": "brief",
+              "level": "beginner",
+              "locale": "ru"
+            }
+          },
+          {
+            "kind": "assistant",
+            "message_id": "00000000-0000-0000-0000-000000000065",
+            "created_at": "2026-09-24T10:00:00Z",
+            "author": {
+              "role_id": "friend",
+              "display_name": "Друг"
+            },
+            "answer": {
+              "schema_version": "1.1",
+              "session_id": "11111111-1111-4111-8111-111111111111",
+              "request_id": "22222222-2222-4222-8222-222222222222",
+              "execution_id": "33333333-3333-4333-8333-333333333333",
+              "answer_id": "66666666-6666-4666-8666-666666666666",
+              "kind": "answer",
+              "completeness": "complete",
+              "direct_answer": "Учебная серия создана в 2000 году.",
+              "sections": [],
+              "claims": [
+                {
+                  "claim_id": "c1",
+                  "statement": "Учебная серия создана в 2000 году.",
+                  "status": "supported",
+                  "fragment_ids": [
+                    "f1"
+                  ]
+                }
+              ],
+              "fragments": [
+                {
+                  "fragment_id": "f1",
+                  "source_id": "s1",
+                  "text": "Учебная серия создана в 2000 году.",
+                  "locator": "Учебная запись 1"
+                }
+              ],
+              "sources": [
+                {
+                  "source_id": "s1",
+                  "url": "https://example.org/fixture-series",
+                  "title": "Синтетический каталог для примера контракта",
+                  "author_or_organization": "Учебный источник",
+                  "published_date": null,
+                  "retrieved_at": "2026-09-21T12:00:01Z",
+                  "source_type": "primary",
+                  "access_mode": "excerpt",
+                  "usage_constraints": [
+                    "Синтетический пример, не исторический источник"
+                  ]
+                }
+              ],
+              "limitations": [],
+              "clarification": null,
+              "follow_ups": [],
+              "style": {
+                "detail": "brief",
+                "level": "beginner"
+              },
+              "locale": "ru"
+            }
+          },
+          {
+            "kind": "user",
+            "message_id": "00000000-0000-0000-0000-000000000066",
+            "created_at": "2026-09-24T10:00:00Z",
+            "request_id": "00000000-0000-0000-0000-00000000006e",
+            "execution_id": "00000000-0000-0000-0000-00000000006f",
+            "text": "Продолжи объяснение.",
+            "settings": {
+              "detail": "brief",
+              "level": "beginner",
+              "locale": "ru"
+            }
+          },
+          {
+            "kind": "assistant",
+            "message_id": "00000000-0000-0000-0000-000000000067",
+            "created_at": "2026-09-24T10:00:00Z",
+            "author": {
+              "role_id": "art_historian",
+              "display_name": "Искусствовед"
+            },
+            "answer": {
+              "schema_version": "1.1",
+              "session_id": "11111111-1111-4111-8111-111111111111",
+              "request_id": "00000000-0000-0000-0000-00000000006e",
+              "execution_id": "00000000-0000-0000-0000-00000000006f",
+              "answer_id": "00000000-0000-0000-0000-000000000070",
+              "kind": "answer",
+              "completeness": "complete",
+              "direct_answer": "Учебная серия создана в 2000 году.",
+              "sections": [],
+              "claims": [
+                {
+                  "claim_id": "c1",
+                  "statement": "Учебная серия создана в 2000 году.",
+                  "status": "supported",
+                  "fragment_ids": [
+                    "f1"
+                  ]
+                }
+              ],
+              "fragments": [
+                {
+                  "fragment_id": "f1",
+                  "source_id": "s1",
+                  "text": "Учебная серия создана в 2000 году.",
+                  "locator": "Учебная запись 1"
+                }
+              ],
+              "sources": [
+                {
+                  "source_id": "s1",
+                  "url": "https://example.org/fixture-series",
+                  "title": "Синтетический каталог для примера контракта",
+                  "author_or_organization": "Учебный источник",
+                  "published_date": null,
+                  "retrieved_at": "2026-09-21T12:00:01Z",
+                  "source_type": "primary",
+                  "access_mode": "excerpt",
+                  "usage_constraints": [
+                    "Синтетический пример, не исторический источник"
+                  ]
+                }
+              ],
+              "limitations": [],
+              "clarification": null,
+              "follow_ups": [],
+              "style": {
+                "detail": "brief",
+                "level": "beginner"
+              },
+              "locale": "ru"
+            }
+          }
+        ],
+        "executions": [
+          {
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "execution_id": "33333333-3333-4333-8333-333333333333",
+            "status": "completed",
+            "answer_id": "66666666-6666-4666-8666-666666666666",
+            "error": null
+          },
+          {
+            "request_id": "00000000-0000-0000-0000-00000000006e",
+            "execution_id": "00000000-0000-0000-0000-00000000006f",
+            "status": "completed",
+            "answer_id": "00000000-0000-0000-0000-000000000070",
+            "error": null
+          }
+        ],
+        "source_cards": [
+          {
+            "card_id": "00000000-0000-0000-0000-0000000000c8",
+            "source": {
+              "source_id": "s1",
+              "url": "https://example.org/fixture-series",
+              "title": "Синтетический каталог для примера контракта",
+              "author_or_organization": "Учебный источник",
+              "published_date": null,
+              "retrieved_at": "2026-09-21T12:00:01Z",
+              "source_type": "primary",
+              "access_mode": "excerpt",
+              "usage_constraints": [
+                "Синтетический пример, не исторический источник"
+              ]
+            },
+            "first_answer_id": "66666666-6666-4666-8666-666666666666",
+            "first_message_id": "00000000-0000-0000-0000-000000000065",
+            "context_comment": "Когда создан и впервые опубликован этот снимок?"
+          }
+        ],
+        "answer_states": [
+          {
+            "answer_id": "66666666-6666-4666-8666-666666666666",
+            "eligible": true,
+            "shown": false,
+            "feedback_revision": 0,
+            "rating": "no_feedback",
+            "comment": null
+          },
+          {
+            "answer_id": "00000000-0000-0000-0000-000000000070",
+            "eligible": true,
+            "shown": false,
+            "feedback_revision": 0,
+            "rating": "no_feedback",
+            "comment": null
+          }
+        ],
+        "capabilities": {
+          "max_message_chars": 4000,
+          "max_feedback_comment_chars": 1000,
+          "can_export_dialogue": true,
+          "can_export_sources": true
+        }
+      },
+      "note": "Старая подпись и первичная карточка не меняются."
+    },
+    {
+      "id": "send-message",
+      "model": "MessageRequest",
+      "payload": {
+        "request_id": "22222222-2222-4222-8222-222222222222",
+        "text": "Когда создан и впервые опубликован этот снимок?",
+        "settings_revision": 0,
+        "settings": {
+          "detail": "brief",
+          "level": "beginner",
+          "locale": "ru"
+        },
+        "clarification_id": null
+      },
+      "note": ""
+    },
+    {
+      "id": "reply-to-clarification",
+      "model": "MessageRequest",
+      "payload": {
+        "request_id": "00000000-0000-0000-0000-000000000078",
+        "text": "Первый вариант",
+        "settings_revision": 0,
+        "settings": {
+          "detail": "brief",
+          "level": "beginner",
+          "locale": "ru"
+        },
+        "clarification_id": "clar-1"
+      },
+      "note": ""
+    },
+    {
+      "id": "cancel-clarification",
+      "model": "CancelClarification",
+      "payload": {
+        "request_id": "00000000-0000-0000-0000-000000000079",
+        "clarification_id": "clar-1"
+      },
+      "note": ""
+    },
+    {
+      "id": "accepted",
+      "model": "ExecutionAccepted",
+      "payload": {
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "request_id": "22222222-2222-4222-8222-222222222222",
+        "execution_id": "33333333-3333-4333-8333-333333333333",
+        "session_status": "in_progress"
+      },
+      "note": ""
+    },
+    {
+      "id": "execution-completed",
+      "model": "ExecutionView",
+      "payload": {
+        "contract_version": "mvp1-http-draft.1",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "execution": {
+          "request_id": "22222222-2222-4222-8222-222222222222",
+          "execution_id": "33333333-3333-4333-8333-333333333333",
+          "status": "completed",
+          "answer_id": "66666666-6666-4666-8666-666666666666",
+          "error": null
+        },
+        "answer": {
+          "schema_version": "1.1",
+          "session_id": "11111111-1111-4111-8111-111111111111",
+          "request_id": "22222222-2222-4222-8222-222222222222",
+          "execution_id": "33333333-3333-4333-8333-333333333333",
+          "answer_id": "66666666-6666-4666-8666-666666666666",
+          "kind": "answer",
+          "completeness": "complete",
+          "direct_answer": "Учебная серия создана в 2000 году.",
+          "sections": [],
+          "claims": [
+            {
+              "claim_id": "c1",
+              "statement": "Учебная серия создана в 2000 году.",
+              "status": "supported",
+              "fragment_ids": [
+                "f1"
+              ]
+            }
+          ],
+          "fragments": [
+            {
+              "fragment_id": "f1",
+              "source_id": "s1",
+              "text": "Учебная серия создана в 2000 году.",
+              "locator": "Учебная запись 1"
+            }
+          ],
+          "sources": [
+            {
+              "source_id": "s1",
+              "url": "https://example.org/fixture-series",
+              "title": "Синтетический каталог для примера контракта",
+              "author_or_organization": "Учебный источник",
+              "published_date": null,
+              "retrieved_at": "2026-09-21T12:00:01Z",
+              "source_type": "primary",
+              "access_mode": "excerpt",
+              "usage_constraints": [
+                "Синтетический пример, не исторический источник"
+              ]
+            }
+          ],
+          "limitations": [],
+          "clarification": null,
+          "follow_ups": [],
+          "style": {
+            "detail": "brief",
+            "level": "beginner"
+          },
+          "locale": "ru"
+        },
+        "author": {
+          "role_id": "friend",
+          "display_name": "Друг"
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "execution-failed",
+      "model": "ExecutionView",
+      "payload": {
+        "contract_version": "mvp1-http-draft.1",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "execution": {
+          "request_id": "22222222-2222-4222-8222-222222222222",
+          "execution_id": "33333333-3333-4333-8333-333333333333",
+          "status": "failed",
+          "answer_id": null,
+          "error": {
+            "code": "provider_error",
+            "message": "Источник временно недоступен",
+            "retryable": true
+          }
+        },
+        "answer": null,
+        "author": null
+      },
+      "note": ""
+    },
+    {
+      "id": "settings-update",
+      "model": "SettingsUpdate",
+      "payload": {
+        "request_id": "00000000-0000-0000-0000-000000000082",
+        "expected_settings_revision": 0,
+        "settings": {
+          "detail": "detailed",
+          "level": "beginner",
+          "locale": "ru"
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "settings-receipt",
+      "model": "SettingsReceipt",
+      "payload": {
+        "contract_version": "mvp1-http-draft.1",
+        "request_id": "00000000-0000-0000-0000-000000000082",
+        "settings_revision": 1,
+        "settings": {
+          "detail": "detailed",
+          "level": "beginner",
+          "locale": "ru"
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "shown",
+      "model": "AnswerState",
+      "payload": {
+        "answer_id": "66666666-6666-4666-8666-666666666666",
+        "eligible": true,
+        "shown": true,
+        "feedback_revision": 0,
+        "rating": "no_feedback",
+        "comment": null
+      },
+      "note": ""
+    },
+    {
+      "id": "feedback-negative",
+      "model": "FeedbackUpdate",
+      "payload": {
+        "request_id": "00000000-0000-0000-0000-00000000008c",
+        "expected_feedback_revision": 0,
+        "rating": "negative",
+        "comment": "Нужны примеры"
+      },
+      "note": ""
+    },
+    {
+      "id": "feedback-receipt",
+      "model": "FeedbackReceipt",
+      "payload": {
+        "contract_version": "mvp1-http-draft.1",
+        "request_id": "00000000-0000-0000-0000-00000000008c",
+        "state": {
+          "answer_id": "66666666-6666-4666-8666-666666666666",
+          "eligible": true,
+          "shown": true,
+          "feedback_revision": 1,
+          "rating": "negative",
+          "comment": "Нужны примеры"
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "feedback-positive-removes-comment",
+      "model": "FeedbackUpdate",
+      "payload": {
+        "request_id": "00000000-0000-0000-0000-00000000008d",
+        "expected_feedback_revision": 1,
+        "rating": "positive",
+        "comment": null
+      },
+      "note": ""
+    },
+    {
+      "id": "export-prepare",
+      "model": "ExportPrepare",
+      "payload": {
+        "request_id": "00000000-0000-0000-0000-000000000096",
+        "expected_revision": 3
+      },
+      "note": ""
+    },
+    {
+      "id": "export-ready",
+      "model": "ExportReady",
+      "payload": {
+        "contract_version": "mvp1-http-draft.1",
+        "export_id": "00000000-0000-0000-0000-000000000097",
+        "snapshot_revision": 3,
+        "expires_at": "2026-09-24T10:01:00Z",
+        "available": [
+          "dialogue",
+          "sources"
+        ],
+        "incomplete_execution": false
+      },
+      "note": ""
+    },
+    {
+      "id": "statistics",
+      "model": "StatsReport",
+      "payload": {
+        "contract_version": "mvp1-http-draft.1",
+        "generated_at": "2026-09-24T10:00:00Z",
+        "from_date": "2026-09-24",
+        "to_date": "2026-09-24",
+        "days": [
+          {
+            "day": "2026-09-24",
+            "completeness": "unknown",
+            "shown_answers": 3,
+            "positive": 1,
+            "negative": 0,
+            "no_feedback": 1,
+            "pending_feedback": 1,
+            "technical_errors": [
+              {
+                "code": "provider_error",
+                "count": 1
+              }
+            ]
+          }
+        ]
+      },
+      "note": "Надёжность/привязка к дню требуют A-08; неизвестная полнота не complete."
+    },
+    {
+      "id": "error-session_unavailable",
+      "model": "ApiError",
+      "payload": {
+        "schema_version": "1.1",
+        "code": "session_unavailable",
+        "message": "Действие не выполнено",
+        "session_id": null,
+        "request_id": null,
+        "session_status": null,
+        "active_execution_id": null
+      },
+      "note": "Нули допустимы при отсутствии доступного контекста; конфликт авторизованной сессии возвращает её текущий статус."
+    },
+    {
+      "id": "error-invalid_csrf",
+      "model": "ApiError",
+      "payload": {
+        "schema_version": "1.1",
+        "code": "invalid_csrf",
+        "message": "Действие не выполнено",
+        "session_id": null,
+        "request_id": null,
+        "session_status": null,
+        "active_execution_id": null
+      },
+      "note": "Нули допустимы при отсутствии доступного контекста; конфликт авторизованной сессии возвращает её текущий статус."
+    },
+    {
+      "id": "error-answer_not_found",
+      "model": "ApiError",
+      "payload": {
+        "schema_version": "1.1",
+        "code": "answer_not_found",
+        "message": "Действие не выполнено",
+        "session_id": null,
+        "request_id": null,
+        "session_status": null,
+        "active_execution_id": null
+      },
+      "note": "Нули допустимы при отсутствии доступного контекста; конфликт авторизованной сессии возвращает её текущий статус."
+    },
+    {
+      "id": "error-export_expired",
+      "model": "ApiError",
+      "payload": {
+        "schema_version": "1.1",
+        "code": "export_expired",
+        "message": "Действие не выполнено",
+        "session_id": null,
+        "request_id": null,
+        "session_status": null,
+        "active_execution_id": null
+      },
+      "note": "Нули допустимы при отсутствии доступного контекста; конфликт авторизованной сессии возвращает её текущий статус."
+    },
+    {
+      "id": "error-invalid_request",
+      "model": "ApiError",
+      "payload": {
+        "schema_version": "1.1",
+        "code": "invalid_request",
+        "message": "Действие не выполнено",
+        "session_id": null,
+        "request_id": null,
+        "session_status": null,
+        "active_execution_id": null
+      },
+      "note": "Нули допустимы при отсутствии доступного контекста; конфликт авторизованной сессии возвращает её текущий статус."
+    },
+    {
+      "id": "error-settings_revision_conflict",
+      "model": "ApiError",
+      "payload": {
+        "schema_version": "1.1",
+        "code": "settings_revision_conflict",
+        "message": "Действие не выполнено",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "request_id": "22222222-2222-4222-8222-222222222222",
+        "session_status": "ready",
+        "active_execution_id": null
+      },
+      "note": "Нули допустимы при отсутствии доступного контекста; конфликт авторизованной сессии возвращает её текущий статус."
+    },
+    {
+      "id": "error-feedback_revision_conflict",
+      "model": "ApiError",
+      "payload": {
+        "schema_version": "1.1",
+        "code": "feedback_revision_conflict",
+        "message": "Действие не выполнено",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "request_id": "22222222-2222-4222-8222-222222222222",
+        "session_status": "ready",
+        "active_execution_id": null
+      },
+      "note": "Нули допустимы при отсутствии доступного контекста; конфликт авторизованной сессии возвращает её текущий статус."
+    },
+    {
+      "id": "error-snapshot_revision_conflict",
+      "model": "ApiError",
+      "payload": {
+        "schema_version": "1.1",
+        "code": "snapshot_revision_conflict",
+        "message": "Действие не выполнено",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "request_id": "22222222-2222-4222-8222-222222222222",
+        "session_status": "ready",
+        "active_execution_id": null
+      },
+      "note": "Нули допустимы при отсутствии доступного контекста; конфликт авторизованной сессии возвращает её текущий статус."
+    },
+    {
+      "id": "error-budget_exhausted",
+      "model": "ApiError",
+      "payload": {
+        "schema_version": "1.1",
+        "code": "budget_exhausted",
+        "message": "Действие не выполнено",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "request_id": "22222222-2222-4222-8222-222222222222",
+        "session_status": "ready",
+        "active_execution_id": null
+      },
+      "note": "Нули допустимы при отсутствии доступного контекста; конфликт авторизованной сессии возвращает её текущий статус."
+    },
+    {
+      "id": "error-rate_limited",
+      "model": "ApiError",
+      "payload": {
+        "schema_version": "1.1",
+        "code": "rate_limited",
+        "message": "Действие не выполнено",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "request_id": "22222222-2222-4222-8222-222222222222",
+        "session_status": "ready",
+        "active_execution_id": null
+      },
+      "note": "Нули допустимы при отсутствии доступного контекста; конфликт авторизованной сессии возвращает её текущий статус."
+    },
+    {
+      "id": "error-queue_full",
+      "model": "ApiError",
+      "payload": {
+        "schema_version": "1.1",
+        "code": "queue_full",
+        "message": "Действие не выполнено",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "request_id": "22222222-2222-4222-8222-222222222222",
+        "session_status": "ready",
+        "active_execution_id": null
+      },
+      "note": "Нули допустимы при отсутствии доступного контекста; конфликт авторизованной сессии возвращает её текущий статус."
+    },
+    {
+      "id": "error-session-busy",
+      "model": "ApiError",
+      "payload": {
+        "schema_version": "1.1",
+        "code": "session_busy",
+        "message": "Запрос обрабатывается. Дождитесь ответа.",
+        "session_id": "11111111-1111-4111-8111-111111111111",
+        "request_id": "22222222-2222-4222-8222-000000000010",
+        "session_status": "in_progress",
+        "active_execution_id": "33333333-3333-4333-8333-333333333333"
+      },
+      "note": ""
+    }
+  ]
+}

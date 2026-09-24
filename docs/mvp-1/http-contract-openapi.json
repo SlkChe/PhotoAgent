@@ -1,0 +1,4990 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "B-01 HTTP — кандидат для согласования",
+    "version": "mvp1-http-draft.1",
+    "description": "Кандидат, не реализация. См. http-contract-draft.md."
+  },
+  "servers": [
+    {
+      "url": "https://contract-not-deployed.invalid"
+    }
+  ],
+  "paths": {
+    "/mvp1/browser/context": {
+      "get": {
+        "operationId": "browserContext",
+        "summary": "Получить CSRF-контекст",
+        "description": "ПРЕДЛОЖЕНИЕ B-01. Не реализовано. Семантика: http-contract-draft.md.",
+        "tags": [
+          "browser-read"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Получить CSRF-контекст",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Set-Cookie": {
+                "description": "HttpOnly CSRF-контекст, не новая сессия",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BrowserContext"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "invalid_request",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_request"
+            ]
+          },
+          "500": {
+            "description": "internal_error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "internal_error"
+            ]
+          },
+          "403": {
+            "description": "invalid_origin",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_origin"
+            ]
+          },
+          "503": {
+            "description": "context_capacity",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Секунды до явной попытки, если известны; не команда retry",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "context_capacity"
+            ]
+          }
+        },
+        "parameters": [
+          {
+            "name": "__Host-photoagent",
+            "in": "cookie",
+            "required": false,
+            "description": "Secure HttpOnly-cookie; не доступна JavaScript",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "__Host-photoagent-context",
+            "in": "cookie",
+            "required": false,
+            "description": "Secure HttpOnly-cookie; не доступна JavaScript",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/mvp1/browser/session": {
+      "post": {
+        "operationId": "browserSession",
+        "summary": "Создать сессию или повторить выдачу cookie",
+        "description": "ПРЕДЛОЖЕНИЕ B-01. Не реализовано. Семантика: http-contract-draft.md.",
+        "tags": [
+          "browser"
+        ],
+        "security": [
+          {
+            "BrowserContextCookie": [],
+            "CsrfHeader": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Создать сессию или повторить выдачу cookie",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Set-Cookie": {
+                "description": "Secure; HttpOnly; SameSite=Lax; Path=/; без Domain",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "session_unavailable",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_unavailable"
+            ]
+          },
+          "422": {
+            "description": "invalid_request",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_request"
+            ]
+          },
+          "500": {
+            "description": "internal_error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "internal_error"
+            ]
+          },
+          "403": {
+            "description": "invalid_origin, invalid_csrf, invalid_context",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_origin",
+              "invalid_csrf",
+              "invalid_context"
+            ]
+          },
+          "409": {
+            "description": "request_id_conflict, creation_retired, operation_capacity",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "request_id_conflict",
+              "creation_retired",
+              "operation_capacity"
+            ]
+          },
+          "503": {
+            "description": "session_capacity",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Секунды до явной попытки, если известны; не команда retry",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_capacity"
+            ]
+          }
+        },
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "description": "Точный допустимый HTTPS origin",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "__Host-photoagent",
+            "in": "cookie",
+            "required": false,
+            "description": "Secure HttpOnly-cookie; не доступна JavaScript",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "__Host-photoagent-context",
+            "in": "cookie",
+            "required": false,
+            "description": "Secure HttpOnly-cookie; не доступна JavaScript",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OperationRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mvp1/browser/opened": {
+      "post": {
+        "operationId": "browserOpened",
+        "summary": "Зарегистрировать явное открытие",
+        "description": "ПРЕДЛОЖЕНИЕ B-01. Не реализовано. Семантика: http-contract-draft.md.",
+        "tags": [
+          "browser"
+        ],
+        "security": [
+          {
+            "BrowserContextCookie": [],
+            "CsrfHeader": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Зарегистрировать явное открытие",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "session_unavailable",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_unavailable"
+            ]
+          },
+          "422": {
+            "description": "invalid_request",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_request"
+            ]
+          },
+          "500": {
+            "description": "internal_error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "internal_error"
+            ]
+          },
+          "403": {
+            "description": "invalid_origin, invalid_csrf, invalid_context",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_origin",
+              "invalid_csrf",
+              "invalid_context"
+            ]
+          },
+          "409": {
+            "description": "request_id_conflict, creation_retired, operation_capacity",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "request_id_conflict",
+              "creation_retired",
+              "operation_capacity"
+            ]
+          },
+          "503": {
+            "description": "session_capacity",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Секунды до явной попытки, если известны; не команда retry",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_capacity"
+            ]
+          }
+        },
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "description": "Точный допустимый HTTPS origin",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "__Host-photoagent",
+            "in": "cookie",
+            "required": false,
+            "description": "Secure HttpOnly-cookie; не доступна JavaScript",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "__Host-photoagent-context",
+            "in": "cookie",
+            "required": false,
+            "description": "Secure HttpOnly-cookie; не доступна JavaScript",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OperationRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mvp1/browser/clear": {
+      "post": {
+        "operationId": "browserClear",
+        "summary": "Отозвать доступ и очистить сессию",
+        "description": "ПРЕДЛОЖЕНИЕ B-01. Не реализовано. Семантика: http-contract-draft.md.",
+        "tags": [
+          "browser"
+        ],
+        "security": [
+          {
+            "BrowserContextCookie": [],
+            "CsrfHeader": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Отозвать доступ и очистить сессию",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Set-Cookie": {
+                "description": "Secure; HttpOnly; SameSite=Lax; Path=/; без Domain",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "session_unavailable",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_unavailable"
+            ]
+          },
+          "422": {
+            "description": "invalid_request",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_request"
+            ]
+          },
+          "500": {
+            "description": "internal_error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "internal_error"
+            ]
+          },
+          "403": {
+            "description": "invalid_origin, invalid_csrf, invalid_context",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_origin",
+              "invalid_csrf",
+              "invalid_context"
+            ]
+          },
+          "409": {
+            "description": "request_id_conflict, creation_retired, operation_capacity",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "request_id_conflict",
+              "creation_retired",
+              "operation_capacity"
+            ]
+          },
+          "503": {
+            "description": "session_capacity",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Секунды до явной попытки, если известны; не команда retry",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_capacity"
+            ]
+          }
+        },
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "description": "Точный допустимый HTTPS origin",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "__Host-photoagent",
+            "in": "cookie",
+            "required": false,
+            "description": "Secure HttpOnly-cookie; не доступна JavaScript",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "__Host-photoagent-context",
+            "in": "cookie",
+            "required": false,
+            "description": "Secure HttpOnly-cookie; не доступна JavaScript",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OperationRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mvp1/internal/session": {
+      "get": {
+        "operationId": "sessionSnapshot",
+        "summary": "Восстановить полный снимок",
+        "description": "ПРЕДЛОЖЕНИЕ B-01. Не реализовано. Семантика: http-contract-draft.md.",
+        "tags": [
+          "internal"
+        ],
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Восстановить полный снимок",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionSnapshot"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "session_unavailable",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_unavailable"
+            ]
+          },
+          "422": {
+            "description": "invalid_request",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_request"
+            ]
+          },
+          "500": {
+            "description": "internal_error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "internal_error"
+            ]
+          }
+        },
+        "parameters": []
+      }
+    },
+    "/mvp1/internal/session/settings": {
+      "put": {
+        "operationId": "updateSettings",
+        "summary": "Изменить настройки будущих отправок",
+        "description": "ПРЕДЛОЖЕНИЕ B-01. Не реализовано. Семантика: http-contract-draft.md.",
+        "tags": [
+          "internal"
+        ],
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Изменить настройки будущих отправок",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsReceipt"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "session_unavailable",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_unavailable"
+            ]
+          },
+          "422": {
+            "description": "invalid_request",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_request"
+            ]
+          },
+          "500": {
+            "description": "internal_error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "internal_error"
+            ]
+          },
+          "409": {
+            "description": "session_busy, settings_revision_conflict, request_id_conflict",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_busy",
+              "settings_revision_conflict",
+              "request_id_conflict"
+            ]
+          }
+        },
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingsUpdate"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mvp1/internal/messages": {
+      "post": {
+        "operationId": "sendMessage",
+        "summary": "Принять новую реплику или повторить доставку",
+        "description": "ПРЕДЛОЖЕНИЕ B-01. Не реализовано. Семантика: http-contract-draft.md.",
+        "tags": [
+          "internal"
+        ],
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Принять новую реплику или повторить доставку",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecutionAccepted"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Принять новую реплику или повторить доставку",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecutionView"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "session_unavailable",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_unavailable"
+            ]
+          },
+          "422": {
+            "description": "invalid_request",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_request"
+            ]
+          },
+          "500": {
+            "description": "internal_error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "internal_error"
+            ]
+          },
+          "409": {
+            "description": "session_busy, settings_revision_conflict, request_id_conflict, clarification_conflict, session_history_limit",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_busy",
+              "settings_revision_conflict",
+              "request_id_conflict",
+              "clarification_conflict",
+              "session_history_limit"
+            ]
+          },
+          "413": {
+            "description": "message_too_large",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "message_too_large"
+            ]
+          },
+          "429": {
+            "description": "budget_exhausted, rate_limited",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Секунды до явной попытки, если известны; не команда retry",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "budget_exhausted",
+              "rate_limited"
+            ]
+          },
+          "503": {
+            "description": "queue_full",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Секунды до явной попытки, если известны; не команда retry",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "queue_full"
+            ]
+          }
+        },
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mvp1/internal/executions/{execution_id}": {
+      "get": {
+        "operationId": "executionStatus",
+        "summary": "Прочитать состояние выполнения",
+        "description": "ПРЕДЛОЖЕНИЕ B-01. Не реализовано. Семантика: http-contract-draft.md.",
+        "tags": [
+          "internal"
+        ],
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Прочитать состояние выполнения",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecutionView"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "session_unavailable",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_unavailable"
+            ]
+          },
+          "422": {
+            "description": "invalid_request",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_request"
+            ]
+          },
+          "500": {
+            "description": "internal_error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "internal_error"
+            ]
+          },
+          "404": {
+            "description": "execution_not_found",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "execution_not_found"
+            ]
+          }
+        },
+        "parameters": [
+          {
+            "name": "execution_id",
+            "in": "path",
+            "required": true,
+            "description": "UUID не заменяет право доступа",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ]
+      }
+    },
+    "/mvp1/internal/session/clarification/cancel": {
+      "post": {
+        "operationId": "cancelClarification",
+        "summary": "Снять ожидание уточнения",
+        "description": "ПРЕДЛОЖЕНИЕ B-01. Не реализовано. Семантика: http-contract-draft.md.",
+        "tags": [
+          "internal"
+        ],
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Снять ожидание уточнения",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "session_unavailable",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_unavailable"
+            ]
+          },
+          "422": {
+            "description": "invalid_request",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_request"
+            ]
+          },
+          "500": {
+            "description": "internal_error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "internal_error"
+            ]
+          },
+          "409": {
+            "description": "request_id_conflict, clarification_conflict, session_busy",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "request_id_conflict",
+              "clarification_conflict",
+              "session_busy"
+            ]
+          }
+        },
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelClarification"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mvp1/internal/answers/{answer_id}/shown": {
+      "put": {
+        "operationId": "confirmShown",
+        "summary": "Подтвердить первый показ ответа",
+        "description": "ПРЕДЛОЖЕНИЕ B-01. Не реализовано. Семантика: http-contract-draft.md.",
+        "tags": [
+          "internal"
+        ],
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Подтвердить первый показ ответа",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnswerState"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "session_unavailable",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_unavailable"
+            ]
+          },
+          "422": {
+            "description": "invalid_request",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_request"
+            ]
+          },
+          "500": {
+            "description": "internal_error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "internal_error"
+            ]
+          },
+          "404": {
+            "description": "answer_not_found",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "answer_not_found"
+            ]
+          },
+          "409": {
+            "description": "answer_not_rateable",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "answer_not_rateable"
+            ]
+          }
+        },
+        "parameters": [
+          {
+            "name": "answer_id",
+            "in": "path",
+            "required": true,
+            "description": "Ответ только текущей сессии",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ]
+      }
+    },
+    "/mvp1/internal/answers/{answer_id}/feedback": {
+      "put": {
+        "operationId": "updateFeedback",
+        "summary": "Сохранить или заменить отзыв",
+        "description": "ПРЕДЛОЖЕНИЕ B-01. Не реализовано. Семантика: http-contract-draft.md.",
+        "tags": [
+          "internal"
+        ],
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Сохранить или заменить отзыв",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackReceipt"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "session_unavailable",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_unavailable"
+            ]
+          },
+          "422": {
+            "description": "invalid_request",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_request"
+            ]
+          },
+          "500": {
+            "description": "internal_error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "internal_error"
+            ]
+          },
+          "404": {
+            "description": "answer_not_found",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "answer_not_found"
+            ]
+          },
+          "409": {
+            "description": "answer_not_rateable, answer_not_shown, feedback_revision_conflict, request_id_conflict",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "answer_not_rateable",
+              "answer_not_shown",
+              "feedback_revision_conflict",
+              "request_id_conflict"
+            ]
+          },
+          "413": {
+            "description": "comment_too_large",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "comment_too_large"
+            ]
+          }
+        },
+        "parameters": [
+          {
+            "name": "answer_id",
+            "in": "path",
+            "required": true,
+            "description": "Ответ только текущей сессии",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackUpdate"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mvp1/internal/exports": {
+      "post": {
+        "operationId": "prepareExport",
+        "summary": "Зафиксировать снимок для двух файлов",
+        "description": "ПРЕДЛОЖЕНИЕ B-01. Не реализовано. Семантика: http-contract-draft.md.",
+        "tags": [
+          "internal"
+        ],
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Зафиксировать снимок для двух файлов",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportReady"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Зафиксировать снимок для двух файлов",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportReady"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "session_unavailable",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_unavailable"
+            ]
+          },
+          "422": {
+            "description": "invalid_request",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_request"
+            ]
+          },
+          "500": {
+            "description": "internal_error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "internal_error"
+            ]
+          },
+          "409": {
+            "description": "snapshot_revision_conflict, request_id_conflict, export_empty",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "snapshot_revision_conflict",
+              "request_id_conflict",
+              "export_empty"
+            ]
+          },
+          "410": {
+            "description": "export_expired",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "export_expired"
+            ]
+          },
+          "503": {
+            "description": "export_capacity",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Секунды до явной попытки, если известны; не команда retry",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "export_capacity"
+            ]
+          }
+        },
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportPrepare"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mvp1/internal/exports/{export_id}/{kind}": {
+      "get": {
+        "operationId": "downloadExport",
+        "summary": "Скачать файл согласованного снимка",
+        "description": "ПРЕДЛОЖЕНИЕ B-01. Не реализовано. Семантика: http-contract-draft.md.",
+        "tags": [
+          "internal"
+        ],
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Скачать файл согласованного снимка",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Content-Disposition": {
+                "description": "attachment; безопасное фиксированное имя без текста пользователя",
+                "schema": {
+                  "type": "string",
+                  "example": "attachment; filename=\"dialogue.md\""
+                }
+              }
+            },
+            "content": {
+              "text/markdown; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "session_unavailable",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "session_unavailable"
+            ]
+          },
+          "422": {
+            "description": "invalid_request",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_request"
+            ]
+          },
+          "500": {
+            "description": "internal_error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "internal_error"
+            ]
+          },
+          "404": {
+            "description": "export_not_found, export_empty",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "export_not_found",
+              "export_empty"
+            ]
+          },
+          "410": {
+            "description": "export_expired",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "export_expired"
+            ]
+          }
+        },
+        "parameters": [
+          {
+            "name": "export_id",
+            "in": "path",
+            "required": true,
+            "description": "Снимок принадлежит текущей сессии",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "kind",
+            "in": "path",
+            "required": true,
+            "description": "Один из двух файлов",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "dialogue",
+                "sources"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "/mvp1/owner/statistics": {
+      "get": {
+        "operationId": "downloadStatistics",
+        "summary": "Выгрузить дневную статистику владельцу",
+        "description": "ПРЕДЛОЖЕНИЕ B-01. Не реализовано. Семантика: http-contract-draft.md.",
+        "tags": [
+          "owner"
+        ],
+        "security": [
+          {
+            "OwnerBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Выгрузить дневную статистику владельцу",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string",
+                  "example": "attachment; filename=\"statistics.json\""
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatsReport"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "owner_unauthorized",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "owner_unauthorized"
+            ]
+          },
+          "422": {
+            "description": "invalid_request, invalid_period",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "invalid_request",
+              "invalid_period"
+            ]
+          },
+          "500": {
+            "description": "internal_error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "internal_error"
+            ]
+          },
+          "403": {
+            "description": "owner_forbidden",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "owner_forbidden"
+            ]
+          },
+          "503": {
+            "description": "statistics_unavailable",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Секунды до явной попытки, если известны; не команда retry",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            },
+            "x-error-codes": [
+              "statistics_unavailable"
+            ]
+          }
+        },
+        "parameters": [
+          {
+            "name": "from_date",
+            "in": "query",
+            "required": true,
+            "description": "Дата UTC включительно, максимум доступные 30 дней",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to_date",
+            "in": "query",
+            "required": true,
+            "description": "Дата UTC включительно",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "OperationRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "description": "ID явного действия; при retry сохраняется",
+            "examples": [
+              "22222222-2222-4222-8222-222222222222"
+            ],
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id"
+        ],
+        "title": "OperationRequest",
+        "type": "object",
+        "examples": [
+          {
+            "request_id": "22222222-2222-4222-8222-222222222222"
+          }
+        ]
+      },
+      "Locale": {
+        "const": "ru",
+        "type": "string"
+      },
+      "Revision": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "SettingsValue": {
+        "additionalProperties": false,
+        "properties": {
+          "detail": {
+            "description": "Подробность объяснения",
+            "enum": [
+              "brief",
+              "detailed"
+            ],
+            "examples": [
+              "brief"
+            ],
+            "title": "Detail",
+            "type": "string"
+          },
+          "level": {
+            "description": "Уровень читателя",
+            "enum": [
+              "beginner",
+              "advanced"
+            ],
+            "examples": [
+              "beginner"
+            ],
+            "title": "Level",
+            "type": "string"
+          },
+          "locale": {
+            "$ref": "#/components/schemas/Locale",
+            "description": "Локаль будущих отправок",
+            "examples": [
+              "ru"
+            ]
+          }
+        },
+        "required": [
+          "detail",
+          "level",
+          "locale"
+        ],
+        "title": "SettingsValue",
+        "type": "object"
+      },
+      "SettingsUpdate": {
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "description": "ID явного действия; при retry сохраняется",
+            "examples": [
+              "22222222-2222-4222-8222-222222222222"
+            ],
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "expected_settings_revision": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Версия только настроек",
+            "examples": [
+              0
+            ]
+          },
+          "settings": {
+            "$ref": "#/components/schemas/SettingsValue",
+            "description": "Полный целевой набор настроек"
+          }
+        },
+        "required": [
+          "request_id",
+          "expected_settings_revision",
+          "settings"
+        ],
+        "title": "SettingsUpdate",
+        "type": "object",
+        "examples": [
+          {
+            "request_id": "00000000-0000-0000-0000-000000000082",
+            "expected_settings_revision": 0,
+            "settings": {
+              "detail": "detailed",
+              "level": "beginner",
+              "locale": "ru"
+            }
+          }
+        ]
+      },
+      "SettingsReceipt": {
+        "additionalProperties": false,
+        "properties": {
+          "contract_version": {
+            "const": "mvp1-http-draft.1",
+            "description": "Несогласованный HTTP-конверт; не версия предметного Answer",
+            "examples": [
+              "mvp1-http-draft.1"
+            ],
+            "title": "Contract Version",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Подтверждённое действие",
+            "examples": [
+              "22222222-2222-4222-8222-222222222222"
+            ],
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "settings_revision": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Версия после действия",
+            "examples": [
+              1
+            ]
+          },
+          "settings": {
+            "$ref": "#/components/schemas/SettingsValue",
+            "description": "Принятый набор настроек"
+          }
+        },
+        "required": [
+          "contract_version",
+          "request_id",
+          "settings_revision",
+          "settings"
+        ],
+        "title": "SettingsReceipt",
+        "type": "object",
+        "examples": [
+          {
+            "contract_version": "mvp1-http-draft.1",
+            "request_id": "00000000-0000-0000-0000-000000000082",
+            "settings_revision": 1,
+            "settings": {
+              "detail": "detailed",
+              "level": "beginner",
+              "locale": "ru"
+            }
+          }
+        ]
+      },
+      "Text": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "MessageRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "description": "ID явного действия; при retry сохраняется",
+            "examples": [
+              "22222222-2222-4222-8222-222222222222"
+            ],
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "text": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Исходный текст; предел длины приходит в capabilities",
+            "examples": [
+              "Что такое диафрагма?"
+            ]
+          },
+          "settings_revision": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Версия настроек на момент первой отправки",
+            "examples": [
+              0
+            ]
+          },
+          "settings": {
+            "$ref": "#/components/schemas/SettingsValue",
+            "description": "Неизменный снимок настройки для retry"
+          },
+          "clarification_id": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Text"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Ответ на ожидаемое уточнение; иначе null",
+            "examples": [
+              null
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "text",
+          "settings_revision",
+          "settings",
+          "clarification_id"
+        ],
+        "title": "MessageRequest",
+        "type": "object",
+        "examples": [
+          {
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "text": "Когда создан и впервые опубликован этот снимок?",
+            "settings_revision": 0,
+            "settings": {
+              "detail": "brief",
+              "level": "beginner",
+              "locale": "ru"
+            },
+            "clarification_id": null
+          },
+          {
+            "request_id": "00000000-0000-0000-0000-000000000078",
+            "text": "Первый вариант",
+            "settings_revision": 0,
+            "settings": {
+              "detail": "brief",
+              "level": "beginner",
+              "locale": "ru"
+            },
+            "clarification_id": "clar-1"
+          }
+        ]
+      },
+      "CancelClarification": {
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "description": "ID явного действия; при retry сохраняется",
+            "examples": [
+              "22222222-2222-4222-8222-222222222222"
+            ],
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "clarification_id": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Какое ожидаемое уточнение отменить",
+            "examples": [
+              "clarification-1"
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "clarification_id"
+        ],
+        "title": "CancelClarification",
+        "type": "object",
+        "examples": [
+          {
+            "request_id": "00000000-0000-0000-0000-000000000079",
+            "clarification_id": "clar-1"
+          }
+        ]
+      },
+      "BrowserContext": {
+        "additionalProperties": false,
+        "properties": {
+          "contract_version": {
+            "const": "mvp1-http-draft.1",
+            "description": "Несогласованный HTTP-конверт; не версия предметного Answer",
+            "examples": [
+              "mvp1-http-draft.1"
+            ],
+            "title": "Contract Version",
+            "type": "string"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ID только доступной сессии, не bearer",
+            "examples": [
+              null
+            ],
+            "title": "Session Id"
+          },
+          "csrf_token": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Привязан к HttpOnly-контексту; не токен сессии",
+            "examples": [
+              "synthetic-csrf"
+            ]
+          }
+        },
+        "required": [
+          "contract_version",
+          "session_id",
+          "csrf_token"
+        ],
+        "title": "BrowserContext",
+        "type": "object",
+        "examples": [
+          {
+            "contract_version": "mvp1-http-draft.1",
+            "session_id": null,
+            "csrf_token": "synthetic-csrf"
+          }
+        ]
+      },
+      "FeedbackUpdate": {
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "description": "ID явного действия; при retry сохраняется",
+            "examples": [
+              "22222222-2222-4222-8222-222222222222"
+            ],
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "expected_feedback_revision": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Версия отзыва конкретного ответа",
+            "examples": [
+              0
+            ]
+          },
+          "rating": {
+            "description": "Только явная оценка",
+            "enum": [
+              "positive",
+              "negative"
+            ],
+            "examples": [
+              "negative"
+            ],
+            "title": "Rating",
+            "type": "string"
+          },
+          "comment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Text"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Необязательный комментарий при negative; null удаляет",
+            "examples": [
+              "Недостаточно примеров",
+              null
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "expected_feedback_revision",
+          "rating",
+          "comment"
+        ],
+        "title": "FeedbackUpdate",
+        "type": "object",
+        "examples": [
+          {
+            "request_id": "00000000-0000-0000-0000-00000000008c",
+            "expected_feedback_revision": 0,
+            "rating": "negative",
+            "comment": "Нужны примеры"
+          },
+          {
+            "request_id": "00000000-0000-0000-0000-00000000008d",
+            "expected_feedback_revision": 1,
+            "rating": "positive",
+            "comment": null
+          }
+        ]
+      },
+      "AnswerState": {
+        "additionalProperties": false,
+        "properties": {
+          "answer_id": {
+            "description": "Ответ в текущей сессии",
+            "examples": [
+              "66666666-6666-4666-8666-666666666666"
+            ],
+            "format": "uuid",
+            "title": "Answer Id",
+            "type": "string"
+          },
+          "eligible": {
+            "description": "Оценка допустима для answer/insufficient_evidence",
+            "examples": [
+              true
+            ],
+            "title": "Eligible",
+            "type": "boolean"
+          },
+          "shown": {
+            "description": "UI подтвердил показ; повтор не учитывается",
+            "examples": [
+              false
+            ],
+            "title": "Shown",
+            "type": "boolean"
+          },
+          "feedback_revision": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Версия только оценки/комментария",
+            "examples": [
+              0
+            ]
+          },
+          "rating": {
+            "description": "no_feedback не выглядит поставленным лайком",
+            "enum": [
+              "no_feedback",
+              "positive",
+              "negative"
+            ],
+            "examples": [
+              "no_feedback"
+            ],
+            "title": "Rating",
+            "type": "string"
+          },
+          "comment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Text"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Только RAM живой сессии; при positive null",
+            "examples": [
+              null
+            ]
+          }
+        },
+        "required": [
+          "answer_id",
+          "eligible",
+          "shown",
+          "feedback_revision",
+          "rating",
+          "comment"
+        ],
+        "title": "AnswerState",
+        "type": "object",
+        "examples": [
+          {
+            "answer_id": "66666666-6666-4666-8666-666666666666",
+            "eligible": true,
+            "shown": true,
+            "feedback_revision": 0,
+            "rating": "no_feedback",
+            "comment": null
+          }
+        ]
+      },
+      "FeedbackReceipt": {
+        "additionalProperties": false,
+        "properties": {
+          "contract_version": {
+            "const": "mvp1-http-draft.1",
+            "description": "Несогласованный HTTP-конверт; не версия предметного Answer",
+            "examples": [
+              "mvp1-http-draft.1"
+            ],
+            "title": "Contract Version",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "ID принятого изменения",
+            "examples": [
+              "22222222-2222-4222-8222-222222222222"
+            ],
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "state": {
+            "$ref": "#/components/schemas/AnswerState",
+            "description": "Состояние после изменения; при retry прежняя квитанция"
+          }
+        },
+        "required": [
+          "contract_version",
+          "request_id",
+          "state"
+        ],
+        "title": "FeedbackReceipt",
+        "type": "object",
+        "examples": [
+          {
+            "contract_version": "mvp1-http-draft.1",
+            "request_id": "00000000-0000-0000-0000-00000000008c",
+            "state": {
+              "answer_id": "66666666-6666-4666-8666-666666666666",
+              "eligible": true,
+              "shown": true,
+              "feedback_revision": 1,
+              "rating": "negative",
+              "comment": "Нужны примеры"
+            }
+          }
+        ]
+      },
+      "ExportPrepare": {
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "description": "ID явного действия; при retry сохраняется",
+            "examples": [
+              "22222222-2222-4222-8222-222222222222"
+            ],
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "expected_revision": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Версия всего snapshot, которую видел пользователь",
+            "examples": [
+              3
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "expected_revision"
+        ],
+        "title": "ExportPrepare",
+        "type": "object",
+        "examples": [
+          {
+            "request_id": "00000000-0000-0000-0000-000000000096",
+            "expected_revision": 3
+          }
+        ]
+      },
+      "UtcDatetime": {
+        "format": "date-time",
+        "type": "string"
+      },
+      "ExportReady": {
+        "additionalProperties": false,
+        "properties": {
+          "contract_version": {
+            "const": "mvp1-http-draft.1",
+            "description": "Несогласованный HTTP-конверт; не версия предметного Answer",
+            "examples": [
+              "mvp1-http-draft.1"
+            ],
+            "title": "Contract Version",
+            "type": "string"
+          },
+          "export_id": {
+            "description": "ID двух файлов одного снимка; сам по себе не авторизация",
+            "examples": [
+              "88888888-8888-4888-8888-888888888888"
+            ],
+            "format": "uuid",
+            "title": "Export Id",
+            "type": "string"
+          },
+          "snapshot_revision": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Зафиксированная версия диалога",
+            "examples": [
+              3
+            ]
+          },
+          "expires_at": {
+            "$ref": "#/components/schemas/UtcDatetime",
+            "description": "Не позднее expires_at сессии",
+            "examples": [
+              "2026-09-24T10:01:00Z"
+            ]
+          },
+          "available": {
+            "description": "Разрешённые файлы; пустое содержимое не предлагается",
+            "examples": [
+              [
+                "dialogue",
+                "sources"
+              ]
+            ],
+            "items": {
+              "enum": [
+                "dialogue",
+                "sources"
+              ],
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Available",
+            "type": "array"
+          },
+          "incomplete_execution": {
+            "description": "Включена отметка о незавершённом ответе",
+            "examples": [
+              false
+            ],
+            "title": "Incomplete Execution",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "contract_version",
+          "export_id",
+          "snapshot_revision",
+          "expires_at",
+          "available",
+          "incomplete_execution"
+        ],
+        "title": "ExportReady",
+        "type": "object",
+        "examples": [
+          {
+            "contract_version": "mvp1-http-draft.1",
+            "export_id": "00000000-0000-0000-0000-000000000097",
+            "snapshot_revision": 3,
+            "expires_at": "2026-09-24T10:01:00Z",
+            "available": [
+              "dialogue",
+              "sources"
+            ],
+            "incomplete_execution": false
+          }
+        ]
+      },
+      "DayStats": {
+        "additionalProperties": false,
+        "properties": {
+          "day": {
+            "description": "Календарный день UTC",
+            "examples": [
+              "2026-09-24"
+            ],
+            "format": "date",
+            "title": "Day",
+            "type": "string"
+          },
+          "completeness": {
+            "description": "Надёжность периода; точная семантика требует A-08",
+            "enum": [
+              "complete",
+              "partial",
+              "unknown"
+            ],
+            "examples": [
+              "unknown"
+            ],
+            "title": "Completeness",
+            "type": "string"
+          },
+          "shown_answers": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Уникальные показанные оцениваемые ответы",
+            "examples": [
+              1
+            ]
+          },
+          "positive": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Явные положительные оценки",
+            "examples": [
+              1
+            ]
+          },
+          "negative": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Явные отрицательные оценки",
+            "examples": [
+              0
+            ]
+          },
+          "no_feedback": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Итоговые без отклика, отдельно от positive",
+            "examples": [
+              0
+            ]
+          },
+          "pending_feedback": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Ещё не оценённые в живых сессиях",
+            "examples": [
+              0
+            ]
+          },
+          "technical_errors": {
+            "description": "Агрегаты без персональных меток",
+            "examples": [
+              []
+            ],
+            "items": {
+              "$ref": "#/components/schemas/ErrorCount"
+            },
+            "title": "Technical Errors",
+            "type": "array"
+          }
+        },
+        "required": [
+          "day",
+          "completeness",
+          "shown_answers",
+          "positive",
+          "negative",
+          "no_feedback",
+          "pending_feedback",
+          "technical_errors"
+        ],
+        "title": "DayStats",
+        "type": "object"
+      },
+      "ErrorCount": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Безопасная категория, без текста запроса/исключения",
+            "examples": [
+              "provider_error"
+            ]
+          },
+          "count": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Число ошибок",
+            "examples": [
+              0
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "count"
+        ],
+        "title": "ErrorCount",
+        "type": "object"
+      },
+      "StatsReport": {
+        "additionalProperties": false,
+        "properties": {
+          "contract_version": {
+            "const": "mvp1-http-draft.1",
+            "description": "Несогласованный HTTP-конверт; не версия предметного Answer",
+            "examples": [
+              "mvp1-http-draft.1"
+            ],
+            "title": "Contract Version",
+            "type": "string"
+          },
+          "generated_at": {
+            "$ref": "#/components/schemas/UtcDatetime",
+            "description": "Время снимка отчёта UTC",
+            "examples": [
+              "2026-09-24T10:00:00Z"
+            ]
+          },
+          "from_date": {
+            "description": "Начало включительно",
+            "examples": [
+              "2026-09-24"
+            ],
+            "format": "date",
+            "title": "From Date",
+            "type": "string"
+          },
+          "to_date": {
+            "description": "Конец включительно",
+            "examples": [
+              "2026-09-24"
+            ],
+            "format": "date",
+            "title": "To Date",
+            "type": "string"
+          },
+          "days": {
+            "description": "Дневные агрегаты; неизвестный день не изображается нулём",
+            "items": {
+              "$ref": "#/components/schemas/DayStats"
+            },
+            "title": "Days",
+            "type": "array"
+          }
+        },
+        "required": [
+          "contract_version",
+          "generated_at",
+          "from_date",
+          "to_date",
+          "days"
+        ],
+        "title": "StatsReport",
+        "type": "object",
+        "examples": [
+          {
+            "contract_version": "mvp1-http-draft.1",
+            "generated_at": "2026-09-24T10:00:00Z",
+            "from_date": "2026-09-24",
+            "to_date": "2026-09-24",
+            "days": [
+              {
+                "day": "2026-09-24",
+                "completeness": "unknown",
+                "shown_answers": 3,
+                "positive": 1,
+                "negative": 0,
+                "no_feedback": 1,
+                "pending_feedback": 1,
+                "technical_errors": [
+                  {
+                    "code": "provider_error",
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "Answer": {
+        "additionalProperties": false,
+        "properties": {
+          "session_id": {
+            "description": "Владелец выполнения",
+            "examples": [
+              "11111111-1111-4111-8111-111111111111"
+            ],
+            "format": "uuid",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Ключ отправки клиента",
+            "examples": [
+              "22222222-2222-4222-8222-222222222222"
+            ],
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "execution_id": {
+            "description": "Выполнение, назначенное API",
+            "examples": [
+              "33333333-3333-4333-8333-333333333333"
+            ],
+            "format": "uuid",
+            "title": "Execution Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "1.1",
+            "description": "Версия предметной схемы",
+            "examples": [
+              "1.1"
+            ],
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "answer_id": {
+            "description": "ID ответа, назначенный API",
+            "examples": [
+              "66666666-6666-4666-8666-666666666666"
+            ],
+            "format": "uuid",
+            "title": "Answer Id",
+            "type": "string"
+          },
+          "locale": {
+            "$ref": "#/components/schemas/Locale",
+            "description": "Локаль принятого выполнения",
+            "examples": [
+              "ru"
+            ]
+          },
+          "kind": {
+            "description": "Вид ответа",
+            "enum": [
+              "answer",
+              "clarification",
+              "out_of_scope",
+              "insufficient_evidence",
+              "invitation"
+            ],
+            "examples": [
+              "answer"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "completeness": {
+            "description": "Полнота ответа",
+            "enum": [
+              "complete",
+              "limited",
+              "not_applicable"
+            ],
+            "examples": [
+              "complete"
+            ],
+            "title": "Completeness",
+            "type": "string"
+          },
+          "direct_answer": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Прямой ответ или служебное сообщение",
+            "examples": [
+              "Серия создана в 2000 году."
+            ]
+          },
+          "sections": {
+            "description": "Разделы ответа",
+            "examples": [
+              []
+            ],
+            "items": {
+              "$ref": "#/components/schemas/AnswerSection"
+            },
+            "title": "Sections",
+            "type": "array"
+          },
+          "claims": {
+            "description": "Проверяемые утверждения",
+            "examples": [
+              []
+            ],
+            "items": {
+              "$ref": "#/components/schemas/Claim"
+            },
+            "title": "Claims",
+            "type": "array"
+          },
+          "fragments": {
+            "description": "Только использованные публичные фрагменты",
+            "examples": [
+              []
+            ],
+            "items": {
+              "$ref": "#/components/schemas/AnswerFragment"
+            },
+            "title": "Fragments",
+            "type": "array"
+          },
+          "sources": {
+            "description": "Только источники этих фрагментов",
+            "examples": [
+              []
+            ],
+            "items": {
+              "$ref": "#/components/schemas/AnswerSource"
+            },
+            "title": "Sources",
+            "type": "array"
+          },
+          "limitations": {
+            "description": "Оговорки и непокрытые части",
+            "examples": [
+              []
+            ],
+            "items": {
+              "$ref": "#/components/schemas/Text"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "clarification": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AnswerClarification"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Вопрос при kind=clarification",
+            "examples": [
+              null
+            ]
+          },
+          "follow_ups": {
+            "description": "Предложения продолжения",
+            "examples": [
+              []
+            ],
+            "items": {
+              "type": "string"
+            },
+            "title": "Follow Ups",
+            "type": "array"
+          },
+          "style": {
+            "$ref": "#/components/schemas/AnswerStyle",
+            "description": "Стиль принятого выполнения",
+            "examples": [
+              {
+                "detail": "brief",
+                "level": "beginner"
+              }
+            ]
+          }
+        },
+        "required": [
+          "session_id",
+          "request_id",
+          "execution_id",
+          "schema_version",
+          "answer_id",
+          "locale",
+          "kind",
+          "completeness",
+          "direct_answer",
+          "sections",
+          "claims",
+          "fragments",
+          "sources",
+          "limitations",
+          "clarification",
+          "follow_ups",
+          "style"
+        ],
+        "title": "Answer",
+        "type": "object"
+      },
+      "AnswerClarification": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Text",
+            "description": "ID ожидаемого уточнения",
+            "examples": [
+              "clarification-1"
+            ]
+          },
+          "question": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Уточняющий вопрос",
+            "examples": [
+              "Какого автора вы имеете в виду?"
+            ]
+          },
+          "options": {
+            "description": "Варианты подсказок",
+            "examples": [
+              []
+            ],
+            "items": {
+              "type": "string"
+            },
+            "title": "Options",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "question",
+          "options"
+        ],
+        "title": "AnswerClarification",
+        "type": "object"
+      },
+      "AnswerFragment": {
+        "additionalProperties": false,
+        "properties": {
+          "fragment_id": {
+            "$ref": "#/components/schemas/Text",
+            "description": "ID полученного фрагмента",
+            "examples": [
+              "f1"
+            ]
+          },
+          "source_id": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Источник фрагмента",
+            "examples": [
+              "s1"
+            ]
+          },
+          "text": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Оригинальный полученный текст",
+            "examples": [
+              "Серия создана в 2000 году."
+            ]
+          },
+          "locator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Страница или раздел",
+            "examples": [
+              null
+            ],
+            "title": "Locator"
+          }
+        },
+        "required": [
+          "fragment_id",
+          "source_id",
+          "text",
+          "locator"
+        ],
+        "title": "AnswerFragment",
+        "type": "object"
+      },
+      "AnswerSection": {
+        "additionalProperties": false,
+        "properties": {
+          "section_id": {
+            "$ref": "#/components/schemas/Text",
+            "description": "ID раздела ответа",
+            "examples": [
+              "section-1"
+            ]
+          },
+          "heading": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Необязательный заголовок",
+            "examples": [
+              null
+            ],
+            "title": "Heading"
+          },
+          "text": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Текст раздела",
+            "examples": [
+              "Исторический контекст"
+            ]
+          },
+          "claim_ids": {
+            "description": "Утверждения раздела",
+            "examples": [
+              [
+                "c1"
+              ]
+            ],
+            "items": {
+              "$ref": "#/components/schemas/Text"
+            },
+            "title": "Claim Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "section_id",
+          "heading",
+          "text",
+          "claim_ids"
+        ],
+        "title": "AnswerSection",
+        "type": "object"
+      },
+      "AnswerSource": {
+        "additionalProperties": false,
+        "properties": {
+          "source_id": {
+            "$ref": "#/components/schemas/Text",
+            "description": "ID источника внутри пакета",
+            "examples": [
+              "s1"
+            ]
+          },
+          "url": {
+            "$ref": "#/components/schemas/WebUrl",
+            "description": "Точный URL HTTP/HTTPS без нормализации",
+            "examples": [
+              "https://example.org/photo"
+            ]
+          },
+          "title": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Название материала",
+            "examples": [
+              "Каталог фотографий"
+            ]
+          },
+          "author_or_organization": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Автор или организация",
+            "examples": [
+              null
+            ],
+            "title": "Author Or Organization"
+          },
+          "published_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Дата публикации с доступной точностью",
+            "examples": [
+              "2000",
+              null
+            ],
+            "title": "Published Date"
+          },
+          "retrieved_at": {
+            "$ref": "#/components/schemas/UtcDatetime",
+            "description": "Исходное время получения UTC",
+            "examples": [
+              "2026-09-23T12:00:00Z"
+            ]
+          },
+          "source_type": {
+            "description": "Тип источника",
+            "enum": [
+              "primary",
+              "secondary",
+              "encyclopedia",
+              "other"
+            ],
+            "examples": [
+              "primary"
+            ],
+            "title": "Source Type",
+            "type": "string"
+          },
+          "access_mode": {
+            "description": "Реально доступный объём текста",
+            "enum": [
+              "full_text",
+              "excerpt",
+              "snippet"
+            ],
+            "examples": [
+              "excerpt"
+            ],
+            "title": "Access Mode",
+            "type": "string"
+          },
+          "usage_constraints": {
+            "description": "Ограничения использования материала",
+            "examples": [
+              []
+            ],
+            "items": {
+              "type": "string"
+            },
+            "title": "Usage Constraints",
+            "type": "array"
+          }
+        },
+        "required": [
+          "source_id",
+          "url",
+          "title",
+          "author_or_organization",
+          "published_date",
+          "retrieved_at",
+          "source_type",
+          "access_mode",
+          "usage_constraints"
+        ],
+        "title": "AnswerSource",
+        "type": "object"
+      },
+      "AnswerStyle": {
+        "additionalProperties": false,
+        "properties": {
+          "detail": {
+            "description": "Подробность объяснения",
+            "enum": [
+              "brief",
+              "detailed"
+            ],
+            "examples": [
+              "brief"
+            ],
+            "title": "Detail",
+            "type": "string"
+          },
+          "level": {
+            "description": "Уровень читателя",
+            "enum": [
+              "beginner",
+              "advanced"
+            ],
+            "examples": [
+              "beginner"
+            ],
+            "title": "Level",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail",
+          "level"
+        ],
+        "title": "AnswerStyle",
+        "type": "object"
+      },
+      "AssistantMessage": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "assistant",
+            "description": "Роль сообщения в диалоге",
+            "examples": [
+              "assistant"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "message_id": {
+            "description": "ID сообщения",
+            "examples": [
+              "55555555-5555-4555-8555-555555555555"
+            ],
+            "format": "uuid",
+            "title": "Message Id",
+            "type": "string"
+          },
+          "created_at": {
+            "$ref": "#/components/schemas/UtcDatetime",
+            "description": "Время публикации проверенного ответа UTC",
+            "examples": [
+              "2026-09-24T10:00:01Z"
+            ]
+          },
+          "author": {
+            "$ref": "#/components/schemas/RoleRef",
+            "description": "Подпись на момент публикации, не текущая роль"
+          },
+          "answer": {
+            "$ref": "#/components/schemas/Answer",
+            "description": "Полный публичный Answer 1.1"
+          }
+        },
+        "required": [
+          "kind",
+          "message_id",
+          "created_at",
+          "author",
+          "answer"
+        ],
+        "title": "AssistantMessage",
+        "type": "object"
+      },
+      "Capabilities": {
+        "additionalProperties": false,
+        "properties": {
+          "max_message_chars": {
+            "description": "Фактический предел конфигурации, не новое фиксированное требование",
+            "examples": [
+              4000
+            ],
+            "exclusiveMinimum": 0,
+            "title": "Max Message Chars",
+            "type": "integer"
+          },
+          "max_feedback_comment_chars": {
+            "description": "Фактический предел комментария",
+            "examples": [
+              1000
+            ],
+            "exclusiveMinimum": 0,
+            "title": "Max Feedback Comment Chars",
+            "type": "integer"
+          },
+          "can_export_dialogue": {
+            "description": "Есть реплики для экспорта",
+            "examples": [
+              true
+            ],
+            "title": "Can Export Dialogue",
+            "type": "boolean"
+          },
+          "can_export_sources": {
+            "description": "Есть источники для экспорта",
+            "examples": [
+              true
+            ],
+            "title": "Can Export Sources",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "max_message_chars",
+          "max_feedback_comment_chars",
+          "can_export_dialogue",
+          "can_export_sources"
+        ],
+        "title": "Capabilities",
+        "type": "object"
+      },
+      "Claim": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "$ref": "#/components/schemas/Text",
+            "description": "ID проверяемого утверждения",
+            "examples": [
+              "c1"
+            ]
+          },
+          "statement": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Утверждение из текста ответа",
+            "examples": [
+              "Серия создана в 2000 году."
+            ]
+          },
+          "status": {
+            "description": "Статус подтверждения",
+            "enum": [
+              "supported",
+              "disputed",
+              "uncertain"
+            ],
+            "examples": [
+              "supported"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "fragment_ids": {
+            "description": "Опорные фрагменты",
+            "examples": [
+              [
+                "f1"
+              ]
+            ],
+            "items": {
+              "$ref": "#/components/schemas/Text"
+            },
+            "title": "Fragment Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "claim_id",
+          "statement",
+          "status",
+          "fragment_ids"
+        ],
+        "title": "Claim",
+        "type": "object"
+      },
+      "DraftExecutionError": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "description": "budget_exhausted — предлагаемое дополнение, не изменение 1.1",
+            "enum": [
+              "provider_error",
+              "deadline_exceeded",
+              "invalid_output",
+              "internal_error",
+              "budget_exhausted"
+            ],
+            "examples": [
+              "budget_exhausted"
+            ],
+            "title": "Code",
+            "type": "string"
+          },
+          "message": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Без промптов и сырых ошибок провайдера",
+            "examples": [
+              "Бюджет генерации исчерпан"
+            ]
+          },
+          "retryable": {
+            "description": "Допустима новая явная попытка, не автоматический retry",
+            "examples": [
+              false
+            ],
+            "title": "Retryable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "retryable"
+        ],
+        "title": "DraftExecutionError",
+        "type": "object"
+      },
+      "ExecutionSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "description": "ID исходной отправки",
+            "examples": [
+              "22222222-2222-4222-8222-222222222222"
+            ],
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "execution_id": {
+            "description": "ID выполнения",
+            "examples": [
+              "33333333-3333-4333-8333-333333333333"
+            ],
+            "format": "uuid",
+            "title": "Execution Id",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/Stage",
+            "description": "Безопасная стадия для UI",
+            "examples": [
+              "completed"
+            ]
+          },
+          "answer_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Ответ только для completed",
+            "examples": [
+              null
+            ],
+            "title": "Answer Id"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DraftExecutionError"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Ошибка только для failed",
+            "examples": [
+              null
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "execution_id",
+          "status",
+          "answer_id",
+          "error"
+        ],
+        "title": "ExecutionSummary",
+        "type": "object"
+      },
+      "HistoryMessage": {
+        "discriminator": {
+          "mapping": {
+            "assistant": "#/components/schemas/AssistantMessage",
+            "user": "#/components/schemas/UserMessage"
+          },
+          "propertyName": "kind"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/UserMessage"
+          },
+          {
+            "$ref": "#/components/schemas/AssistantMessage"
+          }
+        ]
+      },
+      "PendingClarification": {
+        "additionalProperties": false,
+        "properties": {
+          "answer_id": {
+            "description": "Ответ с вопросом-уточнением",
+            "examples": [
+              "66666666-6666-4666-8666-666666666666"
+            ],
+            "format": "uuid",
+            "title": "Answer Id",
+            "type": "string"
+          },
+          "clarification_id": {
+            "$ref": "#/components/schemas/Text",
+            "description": "ID уточнения из Answer",
+            "examples": [
+              "clarification-1"
+            ]
+          },
+          "question": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Текст для восстановления UI",
+            "examples": [
+              "Какую камеру вы имеете в виду?"
+            ]
+          },
+          "options": {
+            "description": "Подсказки; свободный ответ допустим",
+            "examples": [
+              []
+            ],
+            "items": {
+              "type": "string"
+            },
+            "title": "Options",
+            "type": "array"
+          }
+        },
+        "required": [
+          "answer_id",
+          "clarification_id",
+          "question",
+          "options"
+        ],
+        "title": "PendingClarification",
+        "type": "object"
+      },
+      "RoleRef": {
+        "additionalProperties": false,
+        "properties": {
+          "role_id": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Стабильный ID из реестра ролей; список требует A-13",
+            "examples": [
+              "friend"
+            ]
+          },
+          "display_name": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Подпись на момент ответа, до 20 Unicode code points",
+            "examples": [
+              "Друг"
+            ],
+            "maxLength": 20
+          }
+        },
+        "required": [
+          "role_id",
+          "display_name"
+        ],
+        "title": "RoleRef",
+        "type": "object"
+      },
+      "SourceCard": {
+        "additionalProperties": false,
+        "properties": {
+          "card_id": {
+            "description": "ID карточки точного URL в этой сессии",
+            "examples": [
+              "77777777-7777-4777-8777-777777777777"
+            ],
+            "format": "uuid",
+            "title": "Card Id",
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/components/schemas/AnswerSource",
+            "description": "Публичные метаданные первого появления URL"
+          },
+          "first_answer_id": {
+            "description": "Переход к первому ответу",
+            "examples": [
+              "66666666-6666-4666-8666-666666666666"
+            ],
+            "format": "uuid",
+            "title": "First Answer Id",
+            "type": "string"
+          },
+          "first_message_id": {
+            "description": "ID сообщения первого ответа",
+            "examples": [
+              "55555555-5555-4555-8555-555555555555"
+            ],
+            "format": "uuid",
+            "title": "First Message Id",
+            "type": "string"
+          },
+          "context_comment": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Исходная реплика первого запроса, без новой генерации",
+            "examples": [
+              "Что такое диафрагма?"
+            ]
+          }
+        },
+        "required": [
+          "card_id",
+          "source",
+          "first_answer_id",
+          "first_message_id",
+          "context_comment"
+        ],
+        "title": "SourceCard",
+        "type": "object"
+      },
+      "Stage": {
+        "enum": [
+          "queued",
+          "analyzing",
+          "searching",
+          "building_evidence",
+          "generating",
+          "validating",
+          "completed",
+          "failed",
+          "cancelled"
+        ],
+        "type": "string"
+      },
+      "UserMessage": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "user",
+            "description": "Роль сообщения, не специализация ассистента",
+            "examples": [
+              "user"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "message_id": {
+            "description": "ID сообщения для восстановления порядка",
+            "examples": [
+              "44444444-4444-4444-8444-444444444444"
+            ],
+            "format": "uuid",
+            "title": "Message Id",
+            "type": "string"
+          },
+          "created_at": {
+            "$ref": "#/components/schemas/UtcDatetime",
+            "description": "Время принятия реплики UTC",
+            "examples": [
+              "2026-09-24T10:00:00Z"
+            ]
+          },
+          "request_id": {
+            "description": "Для восстановления принятой отправки после потери ответа",
+            "examples": [
+              "22222222-2222-4222-8222-222222222222"
+            ],
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "execution_id": {
+            "description": "Связанное выполнение",
+            "examples": [
+              "33333333-3333-4333-8333-333333333333"
+            ],
+            "format": "uuid",
+            "title": "Execution Id",
+            "type": "string"
+          },
+          "text": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Исходная реплика без перевода",
+            "examples": [
+              "Что такое диафрагма?"
+            ]
+          },
+          "settings": {
+            "$ref": "#/components/schemas/SettingsValue",
+            "description": "Настройки принятой отправки"
+          }
+        },
+        "required": [
+          "kind",
+          "message_id",
+          "created_at",
+          "request_id",
+          "execution_id",
+          "text",
+          "settings"
+        ],
+        "title": "UserMessage",
+        "type": "object"
+      },
+      "WebUrl": {
+        "$ref": "#/components/schemas/Text"
+      },
+      "SessionSnapshot": {
+        "additionalProperties": false,
+        "properties": {
+          "contract_version": {
+            "const": "mvp1-http-draft.1",
+            "description": "Несогласованный HTTP-конверт; не версия предметного Answer",
+            "examples": [
+              "mvp1-http-draft.1"
+            ],
+            "title": "Contract Version",
+            "type": "string"
+          },
+          "session_id": {
+            "description": "ID для сравнения вкладок, не авторизация",
+            "examples": [
+              "11111111-1111-4111-8111-111111111111"
+            ],
+            "format": "uuid",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "revision": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Версия всего публичного состояния",
+            "examples": [
+              3
+            ]
+          },
+          "last_activity_at": {
+            "$ref": "#/components/schemas/UtcDatetime",
+            "description": "Только согласованные явные действия",
+            "examples": [
+              "2026-09-24T10:00:00Z"
+            ]
+          },
+          "expires_at": {
+            "$ref": "#/components/schemas/UtcDatetime",
+            "description": "Ровно last_activity_at + 43200 секунд",
+            "examples": [
+              "2026-09-24T22:00:00Z"
+            ]
+          },
+          "settings_revision": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Отдельная версия настроек",
+            "examples": [
+              0
+            ]
+          },
+          "settings": {
+            "$ref": "#/components/schemas/SettingsValue",
+            "description": "Настройки будущих отправок"
+          },
+          "current_role": {
+            "$ref": "#/components/schemas/RoleRef",
+            "description": "Текущая роль; не переподписывает историю"
+          },
+          "session_status": {
+            "description": "Состояние живой сессии",
+            "enum": [
+              "ready",
+              "in_progress",
+              "awaiting_clarification"
+            ],
+            "examples": [
+              "ready"
+            ],
+            "title": "Session Status",
+            "type": "string"
+          },
+          "active_execution_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Непустой только при in_progress",
+            "examples": [
+              null
+            ],
+            "title": "Active Execution Id"
+          },
+          "pending_clarification": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PendingClarification"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Только при awaiting_clarification",
+            "examples": [
+              null
+            ]
+          },
+          "messages": {
+            "description": "Полная упорядоченная история в пределах лимита сессии",
+            "items": {
+              "$ref": "#/components/schemas/HistoryMessage"
+            },
+            "title": "Messages",
+            "type": "array"
+          },
+          "executions": {
+            "description": "Состояния всех принятых запросов, включая ошибки",
+            "items": {
+              "$ref": "#/components/schemas/ExecutionSummary"
+            },
+            "title": "Executions",
+            "type": "array"
+          },
+          "source_cards": {
+            "description": "Уникальные точные URL в порядке первого появления",
+            "examples": [
+              []
+            ],
+            "items": {
+              "$ref": "#/components/schemas/SourceCard"
+            },
+            "title": "Source Cards",
+            "type": "array"
+          },
+          "answer_states": {
+            "description": "Восстановление отметок показа и оценки",
+            "examples": [
+              []
+            ],
+            "items": {
+              "$ref": "#/components/schemas/AnswerState"
+            },
+            "title": "Answer States",
+            "type": "array"
+          },
+          "capabilities": {
+            "$ref": "#/components/schemas/Capabilities",
+            "description": "Ограничения и доступность экспорта"
+          }
+        },
+        "required": [
+          "contract_version",
+          "session_id",
+          "revision",
+          "last_activity_at",
+          "expires_at",
+          "settings_revision",
+          "settings",
+          "current_role",
+          "session_status",
+          "active_execution_id",
+          "pending_clarification",
+          "messages",
+          "executions",
+          "source_cards",
+          "answer_states",
+          "capabilities"
+        ],
+        "title": "SessionSnapshot",
+        "type": "object",
+        "examples": [
+          {
+            "contract_version": "mvp1-http-draft.1",
+            "session_id": "11111111-1111-4111-8111-111111111111",
+            "revision": 3,
+            "last_activity_at": "2026-09-24T10:00:00Z",
+            "expires_at": "2026-09-24T22:00:00Z",
+            "settings_revision": 0,
+            "settings": {
+              "detail": "brief",
+              "level": "beginner",
+              "locale": "ru"
+            },
+            "current_role": {
+              "role_id": "friend",
+              "display_name": "Друг"
+            },
+            "session_status": "ready",
+            "active_execution_id": null,
+            "pending_clarification": null,
+            "messages": [
+              {
+                "kind": "user",
+                "message_id": "00000000-0000-0000-0000-000000000064",
+                "created_at": "2026-09-24T10:00:00Z",
+                "request_id": "22222222-2222-4222-8222-222222222222",
+                "execution_id": "33333333-3333-4333-8333-333333333333",
+                "text": "Когда создан и впервые опубликован этот снимок?",
+                "settings": {
+                  "detail": "brief",
+                  "level": "beginner",
+                  "locale": "ru"
+                }
+              },
+              {
+                "kind": "assistant",
+                "message_id": "00000000-0000-0000-0000-000000000065",
+                "created_at": "2026-09-24T10:00:00Z",
+                "author": {
+                  "role_id": "friend",
+                  "display_name": "Друг"
+                },
+                "answer": {
+                  "schema_version": "1.1",
+                  "session_id": "11111111-1111-4111-8111-111111111111",
+                  "request_id": "22222222-2222-4222-8222-222222222222",
+                  "execution_id": "33333333-3333-4333-8333-333333333333",
+                  "answer_id": "66666666-6666-4666-8666-666666666666",
+                  "kind": "answer",
+                  "completeness": "complete",
+                  "direct_answer": "Учебная серия создана в 2000 году.",
+                  "sections": [],
+                  "claims": [
+                    {
+                      "claim_id": "c1",
+                      "statement": "Учебная серия создана в 2000 году.",
+                      "status": "supported",
+                      "fragment_ids": [
+                        "f1"
+                      ]
+                    }
+                  ],
+                  "fragments": [
+                    {
+                      "fragment_id": "f1",
+                      "source_id": "s1",
+                      "text": "Учебная серия создана в 2000 году.",
+                      "locator": "Учебная запись 1"
+                    }
+                  ],
+                  "sources": [
+                    {
+                      "source_id": "s1",
+                      "url": "https://example.org/fixture-series",
+                      "title": "Синтетический каталог для примера контракта",
+                      "author_or_organization": "Учебный источник",
+                      "published_date": null,
+                      "retrieved_at": "2026-09-21T12:00:01Z",
+                      "source_type": "primary",
+                      "access_mode": "excerpt",
+                      "usage_constraints": [
+                        "Синтетический пример, не исторический источник"
+                      ]
+                    }
+                  ],
+                  "limitations": [],
+                  "clarification": null,
+                  "follow_ups": [],
+                  "style": {
+                    "detail": "brief",
+                    "level": "beginner"
+                  },
+                  "locale": "ru"
+                }
+              }
+            ],
+            "executions": [
+              {
+                "request_id": "22222222-2222-4222-8222-222222222222",
+                "execution_id": "33333333-3333-4333-8333-333333333333",
+                "status": "completed",
+                "answer_id": "66666666-6666-4666-8666-666666666666",
+                "error": null
+              }
+            ],
+            "source_cards": [
+              {
+                "card_id": "00000000-0000-0000-0000-0000000000c8",
+                "source": {
+                  "source_id": "s1",
+                  "url": "https://example.org/fixture-series",
+                  "title": "Синтетический каталог для примера контракта",
+                  "author_or_organization": "Учебный источник",
+                  "published_date": null,
+                  "retrieved_at": "2026-09-21T12:00:01Z",
+                  "source_type": "primary",
+                  "access_mode": "excerpt",
+                  "usage_constraints": [
+                    "Синтетический пример, не исторический источник"
+                  ]
+                },
+                "first_answer_id": "66666666-6666-4666-8666-666666666666",
+                "first_message_id": "00000000-0000-0000-0000-000000000065",
+                "context_comment": "Когда создан и впервые опубликован этот снимок?"
+              }
+            ],
+            "answer_states": [
+              {
+                "answer_id": "66666666-6666-4666-8666-666666666666",
+                "eligible": true,
+                "shown": false,
+                "feedback_revision": 0,
+                "rating": "no_feedback",
+                "comment": null
+              }
+            ],
+            "capabilities": {
+              "max_message_chars": 4000,
+              "max_feedback_comment_chars": 1000,
+              "can_export_dialogue": true,
+              "can_export_sources": true
+            }
+          },
+          {
+            "contract_version": "mvp1-http-draft.1",
+            "session_id": "11111111-1111-4111-8111-111111111111",
+            "revision": 0,
+            "last_activity_at": "2026-09-24T10:00:00Z",
+            "expires_at": "2026-09-24T22:00:00Z",
+            "settings_revision": 0,
+            "settings": {
+              "detail": "brief",
+              "level": "beginner",
+              "locale": "ru"
+            },
+            "current_role": {
+              "role_id": "friend",
+              "display_name": "Друг"
+            },
+            "session_status": "ready",
+            "active_execution_id": null,
+            "pending_clarification": null,
+            "messages": [],
+            "executions": [],
+            "source_cards": [],
+            "answer_states": [],
+            "capabilities": {
+              "max_message_chars": 4000,
+              "max_feedback_comment_chars": 1000,
+              "can_export_dialogue": false,
+              "can_export_sources": false
+            }
+          },
+          {
+            "contract_version": "mvp1-http-draft.1",
+            "session_id": "11111111-1111-4111-8111-111111111111",
+            "revision": 1,
+            "last_activity_at": "2026-09-24T10:00:00Z",
+            "expires_at": "2026-09-24T22:00:00Z",
+            "settings_revision": 0,
+            "settings": {
+              "detail": "brief",
+              "level": "beginner",
+              "locale": "ru"
+            },
+            "current_role": {
+              "role_id": "friend",
+              "display_name": "Друг"
+            },
+            "session_status": "in_progress",
+            "active_execution_id": "33333333-3333-4333-8333-333333333333",
+            "pending_clarification": null,
+            "messages": [
+              {
+                "kind": "user",
+                "message_id": "00000000-0000-0000-0000-000000000064",
+                "created_at": "2026-09-24T10:00:00Z",
+                "request_id": "22222222-2222-4222-8222-222222222222",
+                "execution_id": "33333333-3333-4333-8333-333333333333",
+                "text": "Когда создан и впервые опубликован этот снимок?",
+                "settings": {
+                  "detail": "brief",
+                  "level": "beginner",
+                  "locale": "ru"
+                }
+              }
+            ],
+            "executions": [
+              {
+                "request_id": "22222222-2222-4222-8222-222222222222",
+                "execution_id": "33333333-3333-4333-8333-333333333333",
+                "status": "searching",
+                "answer_id": null,
+                "error": null
+              }
+            ],
+            "source_cards": [],
+            "answer_states": [],
+            "capabilities": {
+              "max_message_chars": 4000,
+              "max_feedback_comment_chars": 1000,
+              "can_export_dialogue": true,
+              "can_export_sources": false
+            }
+          }
+        ]
+      },
+      "ExecutionView": {
+        "additionalProperties": false,
+        "properties": {
+          "contract_version": {
+            "const": "mvp1-http-draft.1",
+            "description": "Несогласованный HTTP-конверт; не версия предметного Answer",
+            "examples": [
+              "mvp1-http-draft.1"
+            ],
+            "title": "Contract Version",
+            "type": "string"
+          },
+          "session_id": {
+            "description": "Авторизованный владелец выполнения",
+            "examples": [
+              "11111111-1111-4111-8111-111111111111"
+            ],
+            "format": "uuid",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "execution": {
+            "$ref": "#/components/schemas/ExecutionSummary",
+            "description": "Стадия и идентичность отправки"
+          },
+          "answer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Answer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Предметный Answer 1.1 только для completed",
+            "examples": [
+              null
+            ]
+          },
+          "author": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RoleRef"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Неизменная подпись ответа; только при наличии Answer",
+            "examples": [
+              null
+            ]
+          }
+        },
+        "required": [
+          "contract_version",
+          "session_id",
+          "execution",
+          "answer",
+          "author"
+        ],
+        "title": "ExecutionView",
+        "type": "object",
+        "examples": [
+          {
+            "contract_version": "mvp1-http-draft.1",
+            "session_id": "11111111-1111-4111-8111-111111111111",
+            "execution": {
+              "request_id": "22222222-2222-4222-8222-222222222222",
+              "execution_id": "33333333-3333-4333-8333-333333333333",
+              "status": "completed",
+              "answer_id": "66666666-6666-4666-8666-666666666666",
+              "error": null
+            },
+            "answer": {
+              "schema_version": "1.1",
+              "session_id": "11111111-1111-4111-8111-111111111111",
+              "request_id": "22222222-2222-4222-8222-222222222222",
+              "execution_id": "33333333-3333-4333-8333-333333333333",
+              "answer_id": "66666666-6666-4666-8666-666666666666",
+              "kind": "answer",
+              "completeness": "complete",
+              "direct_answer": "Учебная серия создана в 2000 году.",
+              "sections": [],
+              "claims": [
+                {
+                  "claim_id": "c1",
+                  "statement": "Учебная серия создана в 2000 году.",
+                  "status": "supported",
+                  "fragment_ids": [
+                    "f1"
+                  ]
+                }
+              ],
+              "fragments": [
+                {
+                  "fragment_id": "f1",
+                  "source_id": "s1",
+                  "text": "Учебная серия создана в 2000 году.",
+                  "locator": "Учебная запись 1"
+                }
+              ],
+              "sources": [
+                {
+                  "source_id": "s1",
+                  "url": "https://example.org/fixture-series",
+                  "title": "Синтетический каталог для примера контракта",
+                  "author_or_organization": "Учебный источник",
+                  "published_date": null,
+                  "retrieved_at": "2026-09-21T12:00:01Z",
+                  "source_type": "primary",
+                  "access_mode": "excerpt",
+                  "usage_constraints": [
+                    "Синтетический пример, не исторический источник"
+                  ]
+                }
+              ],
+              "limitations": [],
+              "clarification": null,
+              "follow_ups": [],
+              "style": {
+                "detail": "brief",
+                "level": "beginner"
+              },
+              "locale": "ru"
+            },
+            "author": {
+              "role_id": "friend",
+              "display_name": "Друг"
+            }
+          },
+          {
+            "contract_version": "mvp1-http-draft.1",
+            "session_id": "11111111-1111-4111-8111-111111111111",
+            "execution": {
+              "request_id": "22222222-2222-4222-8222-222222222222",
+              "execution_id": "33333333-3333-4333-8333-333333333333",
+              "status": "failed",
+              "answer_id": null,
+              "error": {
+                "code": "provider_error",
+                "message": "Источник временно недоступен",
+                "retryable": true
+              }
+            },
+            "answer": null,
+            "author": null
+          }
+        ]
+      },
+      "ApiError": {
+        "additionalProperties": false,
+        "properties": {
+          "schema_version": {
+            "const": "1.1",
+            "description": "Версия ошибки",
+            "examples": [
+              "1.1"
+            ],
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "code": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Безопасный код из контракта маршрута",
+            "examples": [
+              "session_busy"
+            ]
+          },
+          "message": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Публичное сообщение без секретов",
+            "examples": [
+              "Запрос обрабатывается"
+            ]
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Только авторизованная сессия",
+            "examples": [
+              null
+            ],
+            "title": "Session Id"
+          },
+          "request_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ID отправки, если доступен",
+            "examples": [
+              null
+            ],
+            "title": "Request Id"
+          },
+          "session_status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "ready",
+                  "in_progress",
+                  "awaiting_clarification",
+                  "closed"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Состояние доступной сессии",
+            "examples": [
+              null
+            ],
+            "title": "Session Status"
+          },
+          "active_execution_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Доступное активное выполнение",
+            "examples": [
+              null
+            ],
+            "title": "Active Execution Id"
+          }
+        },
+        "required": [
+          "schema_version",
+          "code",
+          "message",
+          "session_id",
+          "request_id",
+          "session_status",
+          "active_execution_id"
+        ],
+        "title": "ApiError",
+        "type": "object",
+        "examples": [
+          {
+            "schema_version": "1.1",
+            "code": "session_unavailable",
+            "message": "Действие не выполнено",
+            "session_id": null,
+            "request_id": null,
+            "session_status": null,
+            "active_execution_id": null
+          },
+          {
+            "schema_version": "1.1",
+            "code": "invalid_csrf",
+            "message": "Действие не выполнено",
+            "session_id": null,
+            "request_id": null,
+            "session_status": null,
+            "active_execution_id": null
+          },
+          {
+            "schema_version": "1.1",
+            "code": "answer_not_found",
+            "message": "Действие не выполнено",
+            "session_id": null,
+            "request_id": null,
+            "session_status": null,
+            "active_execution_id": null
+          }
+        ]
+      },
+      "ExecutionAccepted": {
+        "additionalProperties": false,
+        "properties": {
+          "session_id": {
+            "description": "Владелец выполнения",
+            "examples": [
+              "11111111-1111-4111-8111-111111111111"
+            ],
+            "format": "uuid",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Ключ отправки клиента",
+            "examples": [
+              "22222222-2222-4222-8222-222222222222"
+            ],
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "execution_id": {
+            "description": "Выполнение, назначенное API",
+            "examples": [
+              "33333333-3333-4333-8333-333333333333"
+            ],
+            "format": "uuid",
+            "title": "Execution Id",
+            "type": "string"
+          },
+          "session_status": {
+            "const": "in_progress",
+            "description": "Состояние в момент принятия",
+            "examples": [
+              "in_progress"
+            ],
+            "title": "Session Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id",
+          "request_id",
+          "execution_id",
+          "session_status"
+        ],
+        "title": "ExecutionAccepted",
+        "type": "object",
+        "examples": [
+          {
+            "session_id": "11111111-1111-4111-8111-111111111111",
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "execution_id": "33333333-3333-4333-8333-333333333333",
+            "session_status": "in_progress"
+          }
+        ]
+      }
+    },
+    "securitySchemes": {
+      "SessionBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Cookie сессии передаёт сервер UI; не доступен JS"
+      },
+      "OwnerBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Отдельное право владельца; сессионный bearer не подходит"
+      },
+      "BrowserContextCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-photoagent-context"
+      },
+      "CsrfHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-PhotoAgent-CSRF"
+      }
+    }
+  }
+}
