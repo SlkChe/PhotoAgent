@@ -8,6 +8,7 @@ from pydantic import Field, StrictBool, model_validator
 
 from shared.mvp_contracts.answer import AnswerStyle
 from shared.mvp_contracts.common import ContractModel, Locale, Revision, Text, UtcDatetime
+from shared.session_actions import SessionActionRequest as SessionActionRequest
 
 
 class DraftEnvelope(ContractModel):

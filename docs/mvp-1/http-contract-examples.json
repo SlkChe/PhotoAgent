@@ -12,12 +12,21 @@
       "note": ""
     },
     {
-      "id": "create-open-clear",
+      "id": "create-session",
       "model": "OperationRequest",
       "payload": {
         "request_id": "22222222-2222-4222-8222-222222222222"
       },
-      "note": "Три разные операции используют разные ID; здесь пример формы тела."
+      "note": "Создание; clear/opened используют SessionActionRequest."
+    },
+    {
+      "id": "open-clear-session",
+      "model": "SessionActionRequest",
+      "payload": {
+        "request_id": "22222222-2222-4222-8222-222222222222",
+        "expected_session_id": "11111111-1111-4111-8111-111111111111"
+      },
+      "note": "Разные действия имеют разные request_id; retry сохраняет оба ID."
     },
     {
       "id": "snapshot-completed",
@@ -1108,6 +1117,20 @@
         "active_execution_id": "33333333-3333-4333-8333-333333333333"
       },
       "note": ""
+    },
+    {
+      "id": "error-session_changed",
+      "model": "ApiError",
+      "payload": {
+        "schema_version": "1.1",
+        "code": "session_changed",
+        "message": "Сессия изменилась. Обновите состояние.",
+        "session_id": null,
+        "request_id": null,
+        "session_status": null,
+        "active_execution_id": null
+      },
+      "note": "Нули допустимы при отсутствии доступного контекста; конфликт авторизованной сессии возвращает её текущий статус."
     }
   ]
 }

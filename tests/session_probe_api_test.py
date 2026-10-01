@@ -49,10 +49,14 @@ class SessionProbeApiTest(unittest.TestCase):
     def test_clear_does_not_resurrect_old_request_or_token(self) -> None:
         request_id = str(uuid4())
         token = self.create(request_id)
-        self.assertEqual(self.post("clear").status_code, 204)
-        self.assertEqual(self.post("clear").status_code, 403)
+        action = {
+            "request_id": str(uuid4()),
+            "expected_session_id": self.snapshot(token).json()["session_id"],
+        }
+        self.assertEqual(self.post("clear", action).status_code, 204)
+        self.assertEqual(self.post("clear", action).status_code, 403)
         self.bootstrap()
-        self.assertEqual(self.post("clear").status_code, 204)
+        self.assertEqual(self.post("clear", action).status_code, 204)
         self.bootstrap()
         self.assertEqual(self.snapshot(token).status_code, 401)
         self.assertEqual(self.post("create", {"request_id": request_id}).status_code, 409)
@@ -67,23 +71,26 @@ class SessionProbeApiTest(unittest.TestCase):
         self.bootstrap()
         self.assertEqual(self.snapshot(token).json(), initial)
         request_id = str(uuid4())
-        self.assertEqual(self.post("opened", {"request_id": request_id}).status_code, 204)
+        action = {"request_id": request_id, "expected_session_id": initial["session_id"]}
+        self.assertEqual(self.post("opened", action).status_code, 204)
         updated = self.snapshot(token).json()
         self.now += 20
-        self.post("opened", {"request_id": request_id})
+        self.post("opened", action)
         self.assertEqual(self.snapshot(token).json(), updated)
         self.now += 43200 - 20
         self.assertEqual(self.snapshot(token).status_code, 401)
-        self.assertEqual(self.post("opened", {"request_id": str(uuid4())}).status_code, 401)
+        self.assertEqual(
+            self.post("opened", {**action, "request_id": str(uuid4())}).status_code, 401
+        )
 
     def test_every_mutation_requires_origin_and_bound_csrf(self) -> None:
         token = self.create()
         before = self.snapshot(token).json()
         for action, body in (
             ("create", {"request_id": str(uuid4())}),
-            ("opened", {"request_id": str(uuid4())}),
+            ("opened", {"request_id": str(uuid4()), "expected_session_id": before["session_id"]}),
             ("marker", {"marker": "test"}),
-            ("clear", {}),
+            ("clear", {"request_id": str(uuid4()), "expected_session_id": before["session_id"]}),
         ):
             for headers in (
                 {},
@@ -100,7 +107,12 @@ class SessionProbeApiTest(unittest.TestCase):
         with TestClient(self.app, base_url=ORIGIN) as other:
             other.get("/f01/browser/context")
             self.assertEqual(
-                other.post("/f01/browser/clear", json={}, headers=self.headers).status_code, 403
+                other.post(
+                    "/f01/browser/clear",
+                    json={"request_id": str(uuid4()), "expected_session_id": before["session_id"]},
+                    headers=self.headers,
+                ).status_code,
+                403,
             )
 
     def test_cookie_attributes_bootstrap_and_cross_site(self) -> None:
@@ -143,3 +155,68 @@ class SessionProbeApiTest(unittest.TestCase):
         schema = self.app.openapi()
         self.assertEqual(len(schema["paths"]), 6)
         self.assertIn("401", schema["paths"]["/f01/internal/snapshot"]["get"]["responses"])
+
+    def test_stale_clear_retry_and_opened_preserve_new_session(self) -> None:
+        old_token = self.create()
+        action = {
+            "request_id": str(uuid4()),
+            "expected_session_id": self.snapshot(old_token).json()["session_id"],
+        }
+        old_csrf = dict(self.headers)
+        self.assertEqual(self.post("clear", action).status_code, 204)
+        self.bootstrap()
+        token = self.create()
+        self.post("marker", {"marker": "new session"})
+        before = self.snapshot(token).json()
+        self.now += 10
+        for operation in ("clear", "opened"):
+            for request_id in (action["request_id"], str(uuid4())):
+                response = self.post(operation, {**action, "request_id": request_id})
+                self.assertEqual(response.status_code, 409)
+                self.assertEqual(response.json(), {"detail": "session_changed"})
+                self.assertNotIn("set-cookie", response.headers)
+                self.assertEqual(response.headers["cache-control"], "no-store")
+                self.assertEqual(self.client.cookies.get(COOKIE), token)
+                self.assertEqual(self.snapshot(token).json(), before)
+        response = self.client.post("/f01/browser/clear", json=action, headers=old_csrf)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(self.snapshot(old_token).status_code, 401)
+        self.assertEqual(self.snapshot(token).json(), before)
+        fresh = {"request_id": str(uuid4()), "expected_session_id": before["session_id"]}
+        self.assertEqual(self.post("clear", fresh).status_code, 204)
+        self.bootstrap()
+        self.assertEqual(self.post("clear", fresh).status_code, 204)
+        self.bootstrap()
+        self.assertEqual(self.post("opened", fresh).status_code, 401)
+
+    def test_session_action_requires_ids_and_access(self) -> None:
+        token = self.create()
+        before = self.snapshot(token).json()
+        valid = {"request_id": str(uuid4()), "expected_session_id": before["session_id"]}
+        for action in ("clear", "opened"):
+            for body in ({}, {"request_id": str(uuid4())}, {**valid, "expected_session_id": "bad"}):
+                self.assertEqual(self.post(action, body).status_code, 422)
+        self.client.cookies.delete(COOKIE)
+        for action in ("clear", "opened"):
+            self.assertEqual(self.post(action, valid).status_code, 401)
+        self.assertEqual(self.snapshot(token).json(), before)
+        self.now += 43200
+        self.assertEqual(self.post("opened", valid).status_code, 401)
+        self.assertEqual(self.post("clear", valid).status_code, 204)
+
+    def test_browser_schema_matches_accepted_action_contract(self) -> None:
+        from scripts.build_http_contract import build_contract
+        from shared.session_actions import SessionActionRequest
+
+        runtime = self.app.openapi()
+        candidate = build_contract()
+        expected = SessionActionRequest.model_json_schema()
+        self.assertEqual(runtime["components"]["schemas"]["SessionActionRequest"], expected)
+        for action in ("clear", "opened"):
+            for schema, prefix in ((runtime, "/f01"), (candidate, "/mvp1")):
+                route = schema["paths"][f"{prefix}/browser/{action}"]["post"]
+                self.assertEqual(
+                    route["requestBody"]["content"]["application/json"]["schema"],
+                    {"$ref": "#/components/schemas/SessionActionRequest"},
+                )
+                self.assertIn("409", route["responses"])

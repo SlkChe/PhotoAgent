@@ -15,14 +15,15 @@ session-lifecycle.md и реализацию. Этот кандидат не я�
 
 Ответ A/F от 2026-09-24: [заключение A-07/A-13 и H-01–H-09](session-ui-review.md).
 Защита clear/opened через expected_session_id принята владельцем; исправление B-15
-ещё не реализовано. Четыре роли и внешний конверт авторства также приняты
+реализовано 2026-10-01, HTTPS-приёмка отложена владельцем. Четыре роли и внешний конверт авторства также приняты
 (конверт зафиксирован 2026-09-30). selected_role и браузерная выдача файлов
-остаются на согласовании. Дополнения пока не включены
-в схемы/OpenAPI; действующие примеры не доказывают исправления найденных пробелов.
+остаются на согласовании. SessionActionRequest включён в DTO/OpenAPI/примеры;
+selected_role и браузерный экспорт ещё не включены. Проверка схем не заменяет
+сквозную приёмку.
 
 - [OpenAPI 3.1](http-contract-openapi.json): 14 операций, схемы, параметры,
   успешные ответы и ошибки. Сервер `.invalid` намеренно не является рабочим API.
-- [35 JSON-примеров](http-contract-examples.json): `id` указывает сценарий,
+- [37 JSON-примеров](http-contract-examples.json): `id` указывает сценарий,
   `model` — проверяющую модель, `payload` — точное тело без оболочки примера.
 - [Pydantic-модели кандидата](../../shared/http_draft/README.md): отдельный пакет,
   который не импортируется рабочим API/UI. JSON Schema не выражает все межобъектные
@@ -88,6 +89,24 @@ CSRF. Устаревшее создание не восстанавливает 
 OwnerBearer — отдельный секрет/право, недоступное UI и пользовательской сессии.
 Все ответы, включая ошибки и файлы, имеют Cache-Control:no-store.
 
+## Синхронизация B-15 от 2026-10-01
+
+Принятое требование expected_session_id внесено в общий
+`shared/session_actions.py`: обязательные request_id и expected_session_id (UUID).
+Его используют экспериментальный backend и OpenAPI-кандидат; runtime не импортирует
+остальные draft-модели. Создание по-прежнему использует OperationRequest.
+ID ожидаемой сессии фиксируется до confirm/Web Lock по показанному snapshot;
+получение свежего CSRF и повтор сохраняют оба ID. После Origin/CSRF backend
+атомарно сверяет текущую живую сессию: несовпадение → 409 session_changed,
+без мутации, Set-Cookie и продления TTL. При отсутствии живой сессии clear → 204,
+opened → 401; при совпадении проверяется cookie. Старый CSRF → 403 до мутации.
+Проверка текущей сессии имеет приоритет над старой квитанцией clear.
+Старый клиент с пустым clear/без expected_session_id получает 422, обхода нет.
+Ошибки F-01 остаются `{detail: code}`, MVP-кандидат использует ApiError 1.1.
+
+[Протокол совместной проверки B-01/B-15](b15-checks.md). Согласование поведения
+не означает приёмки по HTTPS; полный кандидат сохраняет draft-статус.
+
 ## Операции
 
 Все пути ниже имеют префикс `/mvp1`. Поля nullable обязательны, лишние запрещены.
@@ -98,8 +117,8 @@ OwnerBearer — отдельный секрет/право, недоступно
 |---|---|---|---|
 | GET `/browser/context` | — | 200 BrowserContext | 403 invalid_origin; 503 context_capacity |
 | POST `/browser/session` | OperationRequest | 204, Set-Cookie; повтор возвращает ту же живую сессию | 409 creation_retired/request_id_conflict; 503 session_capacity |
-| POST `/browser/opened` | OperationRequest | 204; ID документа учитывается один раз | 401 session_unavailable; 409 operation_capacity |
-| POST `/browser/clear` | OperationRequest | 204, отзыв и сброс cookie | 403 при старом CSRF; повтор после свежего context безопасен |
+| POST `/browser/opened` | SessionActionRequest | 204; ID документа учитывается один раз | 401 session_unavailable; 409 session_changed/operation_capacity |
+| POST `/browser/clear` | SessionActionRequest | 204, отзыв; при пустом контексте пустое действие | 403 при старом CSRF; 409 session_changed без Set-Cookie |
 | GET `/internal/session` | — | 200 SessionSnapshot | 401 session_unavailable |
 | PUT `/internal/session/settings` | SettingsUpdate | 200 SettingsReceipt | 409 session_busy/settings_revision_conflict/request_id_conflict |
 | POST `/internal/messages` | MessageRequest | 202 ExecutionAccepted; повтор завершённого — 200 ExecutionView | 409 session_busy/request_id_conflict/settings_revision_conflict/clarification_conflict; 413; 429; 503 queue_full |
@@ -143,7 +162,8 @@ SettingsReceipt/FeedbackReceipt — квитанции исходной опер
 уточнения предлагается не менять TTL: она не является новой репликой. Отмена не
 запускает LLM и не удаляет историю. Это уточнение вынесено на согласование H-07.
 Фоновое переключение стадии не меняет TTL, хотя повышает revision.
-Новая сессия предлагается с brief/beginner/ru; выбор стартовых detail/level — H-02.
+Стартовые brief/beginner/ru уже приняты в UI-концепции и решении о языке;
+повторного согласования не требуют. H-02 касается поведения при busy и конфликтах.
 
 ## Настройки и отправка
 

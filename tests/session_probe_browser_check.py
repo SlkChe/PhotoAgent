@@ -31,6 +31,9 @@ class BrowserProbeTest(unittest.TestCase):
         self.context: BrowserContext = self.browser.new_context()
         self.addCleanup(self.context.close)
         self.live = False
+        self.session_id = SESSION_ID
+        self.actions: list[dict[str, str]] = []
+        self.lose_clear = False
         self.created = 0
         self.opened: list[str] = []
         self.mutations: list[str] = []
@@ -45,7 +48,7 @@ class BrowserProbeTest(unittest.TestCase):
             self.api(route, path.rsplit("/", 1)[-1])
         else:
             has_cookie = COOKIE in (route.request.header_value("cookie") or "")
-            displayed = json.dumps(SESSION_ID if self.live and has_cookie else None)
+            displayed = json.dumps(self.session_id if self.live and has_cookie else None)
             route.fulfill(
                 content_type="text/html",
                 body="""<!doctype html><div id="host"><div data-f01-controls></div></div>
@@ -68,7 +71,7 @@ class BrowserProbeTest(unittest.TestCase):
                 content_type="application/json",
                 body=json.dumps(
                     {
-                        "session_id": SESSION_ID if self.live and has_cookie else None,
+                        "session_id": self.session_id if self.live and has_cookie else None,
                         "csrf_token": "synthetic-csrf",
                     }
                 ),
@@ -76,6 +79,19 @@ class BrowserProbeTest(unittest.TestCase):
             return
         self.assertEqual(route.request.method, "POST")
         self.assertEqual(route.request.header_value("x-f01-csrf"), "synthetic-csrf")
+        if action in ("opened", "clear"):
+            body = route.request.post_data_json
+            self.actions.append(body)
+            if self.live and body["expected_session_id"] != self.session_id:
+                route.fulfill(
+                    status=409, content_type="application/json", body='{"detail":"session_changed"}'
+                )
+                return
+        if action == "clear" and self.lose_clear:
+            self.lose_clear = False
+            self.session_id = "00000000-0000-4000-8000-000000000002"
+            route.abort("failed")
+            return
         self.mutations.append(action)
         headers = {}
         if action == "create":
@@ -152,6 +168,41 @@ class BrowserProbeTest(unittest.TestCase):
         page.get_by_role("button", name="Проверить связь").click()
         expect(page.get_by_role("status")).to_contain_text("Живой сессии нет")
         self.assertEqual(self.mutations, [])
+
+    def test_waiting_clear_keeps_displayed_id_before_confirmation(self) -> None:
+        first = self.page()
+        self.create(first)
+        second = self.page()
+        second.evaluate("""() => {
+            window.locked = false;
+            navigator.locks.request('photoagent.f01.session', () => new Promise(resolve => {
+                window.release = resolve; window.locked = true;
+            }));
+        }""")
+        second.wait_for_function("window.locked")
+        first.once("dialog", lambda dialog: dialog.accept())
+        first.get_by_role("button", name="Очистить тестовую сессию").click()
+        self.session_id = "00000000-0000-4000-8000-000000000002"
+        second.evaluate("window.release()")
+        expect(first.get_by_role("status")).to_contain_text("Сессия изменилась")
+        self.assertEqual(self.actions[-1]["expected_session_id"], SESSION_ID)
+        self.assertTrue(self.live)
+        expect(first.get_by_role("button", name="Очистить тестовую сессию")).to_be_disabled()
+
+    def test_lost_clear_keeps_both_ids_on_retry(self) -> None:
+        page = self.page()
+        self.create(page)
+        self.lose_clear = True
+        page.once("dialog", lambda dialog: dialog.accept())
+        page.get_by_role("button", name="Очистить тестовую сессию").click()
+        expect(page.get_by_role("status")).to_contain_text("Операция не подтверждена")
+        original = self.actions[-1].copy()
+        page.get_by_role("button", name="Повторить очистку").click()
+        expect(page.get_by_role("status")).to_contain_text("Сессия изменилась")
+        self.assertEqual(self.actions[-1], original)
+        self.assertEqual(original["expected_session_id"], SESSION_ID)
+        self.assertTrue(self.live)
+        self.assertEqual(self.created, 1)
 
     def test_live_streamlit_shell(self) -> None:
         if SMOKE_URL is None:

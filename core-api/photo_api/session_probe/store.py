@@ -115,6 +115,12 @@ class ProbeStore:
                 return session
         raise ProbeError(401, "session_unavailable")
 
+    def expect_session(self, context: Context, expected_session_id: UUID) -> None:
+        """Отказывает устаревшему намерению до проверки cookie и изменения сессии."""
+        self.sweep()
+        if context.session and context.session.id != expected_session_id:
+            raise ProbeError(409, "session_changed")
+
     def opened(self, session: Session, request_id: UUID) -> None:
         """Регистрирует явное открытие единожды, ограничивая RAM журнала."""
         if request_id in session.opened:

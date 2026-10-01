@@ -16,6 +16,8 @@ from pydantic import BaseModel, ConfigDict, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from starlette.middleware.base import RequestResponseEndpoint
 
+from shared.session_actions import SessionActionRequest
+
 from .store import Context, ProbeError, ProbeStore, utc
 
 COOKIE = "__Host-photoagent-f01"
@@ -193,8 +195,9 @@ def register_mutations(app: FastAPI, store: ProbeStore, origin: str) -> None:
         tags=["browser"],
         dependencies=[Depends(browser_parameters)],
     )
-    async def opened(request: Request, body: Operation) -> Response:
+    async def opened(request: Request, body: SessionActionRequest) -> Response:
         _, context = guard(request, store, origin)
+        store.expect_session(context, body.expected_session_id)
         store.opened(store.authorized(request.cookies.get(COOKIE), context), body.request_id)
         return Response(status_code=204)
 
@@ -226,8 +229,9 @@ def register_clear(app: FastAPI, store: ProbeStore, origin: str) -> None:
         tags=["browser"],
         dependencies=[Depends(browser_parameters)],
     )
-    async def clear(request: Request, body: Body) -> Response:
+    async def clear(request: Request, body: SessionActionRequest) -> Response:
         _, context = guard(request, store, origin)
+        store.expect_session(context, body.expected_session_id)
         if context.session:
             store.authorized(request.cookies.get(COOKIE), context)
         context.session = None

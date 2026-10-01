@@ -12,6 +12,7 @@ from shared.mvp_contracts.execution import ApiError, ExecutionAccepted
 DESTINATION = Path("docs/mvp-1/http-contract-openapi.json")
 MODELS = (
     op.OperationRequest,
+    op.SessionActionRequest,
     op.SettingsUpdate,
     op.SettingsReceipt,
     op.MessageRequest,
@@ -132,11 +133,15 @@ def browser_paths() -> dict[str, object]:
                 title,
                 "browser",
                 {204: None},
-                op.OperationRequest,
-                errors={
-                    409: ["request_id_conflict", "creation_retired", "operation_capacity"],
-                    503: ["session_capacity"],
-                },
+                op.OperationRequest if action == "session" else op.SessionActionRequest,
+                errors=(
+                    {
+                        409: ["request_id_conflict", "creation_retired", "operation_capacity"],
+                        503: ["session_capacity"],
+                    }
+                    if action == "session"
+                    else {409: ["session_changed", "operation_capacity"]}
+                ),
             )
         }
         if action in ("session", "clear"):
