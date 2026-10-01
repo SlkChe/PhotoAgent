@@ -44,16 +44,18 @@ class BrowserProbeTest(unittest.TestCase):
         elif path.startswith("/f01/browser/"):
             self.api(route, path.rsplit("/", 1)[-1])
         else:
+            has_cookie = COOKIE in (route.request.header_value("cookie") or "")
+            displayed = json.dumps(SESSION_ID if self.live and has_cookie else None)
             route.fulfill(
                 content_type="text/html",
                 body="""<!doctype html><div id="host"><div data-f01-controls></div></div>
                 <script type="module">
                   import mount from '/component.js';
                   const component = {parentElement: document.querySelector('#host'),
-                                     data: {timeout_ms: 1000}};
+                                     data: {timeout_ms: 1000, displayed_session_id: DISPLAYED}};
                   let cleanup = mount(component);
                   window.remount = () => { cleanup(); cleanup = mount(component); };
-                </script>""",
+                </script>""".replace("DISPLAYED", displayed),
             )
 
     def api(self, route: Route, action: str) -> None:
@@ -84,8 +86,11 @@ class BrowserProbeTest(unittest.TestCase):
                 f"{COOKIE}=synthetic-browser-token; HttpOnly; Secure; SameSite=Lax; Path=/"
             )
         elif action == "opened":
+            self.assertEqual(route.request.post_data_json["expected_session_id"], SESSION_ID)
             self.opened.append(route.request.post_data_json["request_id"])
         elif action == "clear":
+            self.assertEqual(route.request.post_data_json["expected_session_id"], SESSION_ID)
+            self.assertIn("request_id", route.request.post_data_json)
             self.live = False
             headers["Set-Cookie"] = f"{COOKIE}=; Max-Age=0; Secure; HttpOnly; Path=/"
         route.fulfill(status=204, headers=headers)
@@ -140,7 +145,7 @@ class BrowserProbeTest(unittest.TestCase):
     def test_api_failure_is_safe_and_retry_is_explicit(self) -> None:
         self.fail = True
         page = self.page()
-        expect(page.get_by_role("status")).to_contain_text("операция не подтверждена")
+        expect(page.get_by_role("status")).to_contain_text("Операция не подтверждена")
         self.assertNotIn("synthetic-private-error", page.locator("body").inner_text())
         self.assertEqual(self.mutations, [])
         self.fail = False

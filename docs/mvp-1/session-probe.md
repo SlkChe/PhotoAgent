@@ -20,6 +20,11 @@
 Полная сценарная приёмка и решение A-07 остаются открытыми.
 Документ самодостаточен: локальные `decisions.md` и `tasks.md` не нужны для запуска.
 
+Обновление frontend от 2026-09-30: клиент clear/opened передаёт уже согласованные
+request_id/expected_session_id. Backend B-15 ещё требует синхронного обновления;
+тестирование текущих правок запрещено владельцем и не проводилось.
+[Состав изменений и дальнейшая передача](frontend-progress.md#f-01-клиентская-часть-b-15).
+
 ## Назначение и границы
 
 Отдельная точка входа `streamlit-ui/session_probe.py` проверяет передачу
@@ -55,9 +60,9 @@ HttpOnly, Secure, SameSite=Lax, Path=/, без Domain, Expires и Max-Age.
 |---|---|---|
 | Браузер | GET `/f01/browser/context` | JSON `{session_id: UUID|null, csrf_token: string}`. Чтение не продлевает TTL и не создаёт диалог. Допустима выдача отдельной pre-session CSRF-cookie; токен сессии в JSON не возвращается |
 | Браузер | POST `/f01/browser/create` | JSON `{request_id: UUID}` → 204, Set-Cookie. С действующей cookie вернуть существующую сессию; повтор не создавать второй диалог |
-| Браузер | POST `/f01/browser/opened` | JSON `{request_id: UUID}` → 204. Однократно зарегистрировать явное открытие/refresh; повтор того же ID не продлевает TTL |
+| Браузер | POST `/f01/browser/opened` | JSON `{request_id: UUID, expected_session_id: UUID}` → 204. ID показанной сессии фиксируется до отправки; повтор не продлевает TTL. Новая живая сессия → 409 session_changed |
 | Браузер | POST `/f01/browser/marker` | JSON `{marker: string}`, до 100 символов → 204. Сохранить синтетическую отметку, увеличить revision; это явное действие продлевает TTL |
-| Браузер | POST `/f01/browser/clear` | JSON `{}` → 204. Отозвать доступ, удалить временные данные и сбросить cookie; повтор очистки безопасен |
+| Браузер | POST `/f01/browser/clear` | JSON `{request_id: UUID, expected_session_id: UUID}` → 204. Ожидаемый ID фиксируется до подтверждения и сохраняется при retry. Новая живая сессия → 409 session_changed без мутации/сброса cookie |
 | Только сервер UI | GET `/f01/internal/snapshot` | `Authorization: Bearer <cookie value>` → JSON снимка ниже; без продления TTL |
 
 Все изменяющие браузерные запросы требуют точного допустимого `Origin` и

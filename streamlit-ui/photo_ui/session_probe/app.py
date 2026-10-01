@@ -20,6 +20,7 @@ def render_snapshot(settings: ProbeSettings, token: str | None) -> None:
         if not token:
             st.session_state.f01_snapshot = None
             st.info("Cookie сессии отсутствует в текущем подключении Streamlit.")
+            browser_controls(settings, None)
             return
         try:
             snapshot = ProbeClient(settings).snapshot(token)
@@ -34,8 +35,19 @@ def render_snapshot(settings: ProbeSettings, token: str | None) -> None:
         snapshot: ProbeSnapshot | None = st.session_state.f01_snapshot
         if snapshot is not None:
             st.json(snapshot.diagnostic())
+        browser_controls(settings, snapshot)
 
     poll()
+
+
+def browser_controls(settings: ProbeSettings, snapshot: ProbeSnapshot | None) -> None:
+    _BROWSER(
+        key="f01_browser",
+        data={
+            "timeout_ms": settings.request_timeout_seconds * 1000,
+            "displayed_session_id": str(snapshot.session_id) if snapshot else None,
+        },
+    )
 
 
 def main() -> None:
@@ -51,7 +63,6 @@ def main() -> None:
         st.session_state.f01_snapshot = None
     token = st.context.cookies.get(settings.cookie_name)
     st.write("Cookie в подключении Streamlit:", "есть" if token else "нет")
-    _BROWSER(key="f01_browser", data={"timeout_ms": settings.request_timeout_seconds * 1000})
     render_snapshot(settings, token)
     st.caption(
         "Опрос только читает состояние. Refresh должен продлевать TTL, автоматический "

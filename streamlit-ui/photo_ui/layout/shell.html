@@ -1,0 +1,47 @@
+<section class="shell" aria-label="Диалог с ассистентом фотографа" lang="ru">
+  <header class="toolbar">
+    <button type="button" class="icon" data-toggle="menu" aria-label="Меню" title="Меню" aria-expanded="false" aria-controls="pa-menu">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <div class="role-line" aria-live="polite"><span class="role-caption"></span><strong class="role-name"></strong></div>
+    <button type="button" class="icon source-toggle" data-toggle="sources" aria-label="Источники" title="Источники" aria-expanded="false" aria-controls="pa-sources">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 15l6-6M8 16l-1 1a4 4 0 0 1-5-5l4-4a4 4 0 0 1 5 0M16 8l1-1a4 4 0 0 1 5 5l-4 4a4 4 0 0 1-5 0"/></svg>
+    </button>
+  </header>
+  <aside class="menu panel" id="pa-menu" aria-labelledby="pa-menu-title">
+    <button type="button" class="panel-close" data-close>Закрыть меню</button>
+    <h1 id="pa-menu-title">Ассистент фотографа</h1>
+    <p class="small">Текущий диалог</p>
+    <label>Подробность<select name="detail"><option value="brief">Кратко</option><option value="detailed">Подробно</option></select></label>
+    <label>Уровень объяснения<select name="level"><option value="beginner">Для начинающего</option><option value="advanced">Для подготовленного</option></select></label>
+    <p class="small">Для следующих ответов</p>
+    <p class="session-note small">Диалог удаляется после 12 часов бездействия, при очистке или перезапуске сервиса.</p>
+  </aside>
+  <main class="conversation">
+    <div class="feed" tabindex="-1" aria-label="История диалога">
+      <section class="welcome">
+        <h2>О чём поговорим сегодня?</h2>
+        <p>Обсуждайте фотографию, знакомьтесь с мастерами и находите материалы для изучения.</p>
+        <div class="examples">
+          <button type="button" data-example>Хочу поговорить с искусствоведом</button>
+          <button type="button" data-example>Что такое пикториализм?</button>
+          <button type="button" data-example>Как появилась цветная фотография?</button>
+        </div>
+      </section>
+      <div class="messages"></div>
+    </div>
+    <button type="button" class="new-answer" hidden>К новому ответу</button>
+    <form class="composer">
+      <p class="status" role="status" aria-live="polite"></p>
+      <label for="pa-prompt">Ваше сообщение</label>
+      <textarea id="pa-prompt" rows="4" placeholder="Задайте вопрос или начните разговор"></textarea>
+      <footer><span class="small">Enter — новая строка · Ctrl/⌘ + Enter — отправить</span><button class="send" type="submit">Отправить</button></footer>
+    </form>
+  </main>
+  <aside class="sources panel" id="pa-sources" aria-labelledby="pa-sources-title">
+    <button type="button" class="panel-close" data-close>Вернуться к разговору</button>
+    <h2 id="pa-sources-title">Источники диалога</h2>
+    <p class="sources-empty small">Здесь появятся ссылки из нашего разговора</p>
+    <div class="cards"></div>
+  </aside>
+</section>
