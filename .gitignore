@@ -28,7 +28,13 @@ secrets.toml
 # OS files and IDE
 .DS_Store
 .vscode
-tasks.md
+
 # Локальные технические журналы обмена между участниками
+tasks.md
 decisions.md
 discussion.md
+qa-handoff.md
+qa-run-report.md
+ui-design-questions.md
+b15-checks.md
+qa-artifacts
