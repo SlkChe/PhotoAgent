@@ -19,9 +19,13 @@ class DraftApiClient:
         response = self.transport.request("GET", "session", token)
         return decode(response, SessionSnapshot)
 
-    def execution(self, token: SecretStr, execution_id: UUID) -> ExecutionView:
+    def execution(
+        self, token: SecretStr, execution_id: UUID, expected_session_id: UUID
+    ) -> ExecutionView:
         response = self.transport.request("GET", f"executions/{execution_id}", token)
         result = decode(response, ExecutionView)
+        if result.session_id != expected_session_id:
+            raise ClientError("protocol", code="session_mismatch")
         if result.execution.execution_id != execution_id:
             raise ClientError("protocol", code="execution_mismatch")
         return result

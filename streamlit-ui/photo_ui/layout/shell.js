@@ -10,6 +10,9 @@ export default function(component) {
         submissionRevision: view.submission_revision,
         focus: null, selection: null, openCards: [], hasNew: false,
     };
+    // Streamlit повторно вызывает mount при data update без cleanup предыдущего вызова.
+    // Снять старые listeners до установки новой версии view и восстановления DOM.
+    state.dispose?.();
     memories.set(component.data.instance_key, state);
     const $ = selector => root.querySelector(selector);
     const feed = $(".feed");
@@ -221,7 +224,8 @@ export default function(component) {
         if (view.input_disabled || state.pending || !prompt.value.trim()) return;
         state.draft = prompt.value;
         state.pending = true;
-        clearTimeout(draftTimer); saveDraft(); syncSend();
+        // Trigger уже содержит текст: отдельное обновление draft здесь создаёт лишний rerun.
+        clearTimeout(draftTimer); syncSend();
         emit("send", {text: state.draft});
     });
     on(prompt, "keydown", event => {
@@ -285,7 +289,10 @@ export default function(component) {
     observer.observe(toolbar);
     on(window, "resize", measure);
     if (window.visualViewport) on(window.visualViewport, "resize", measure);
-    return () => {
+    let disposed = false;
+    const dispose = () => {
+        if (disposed) return;
+        disposed = true;
         state.draft = prompt.value; state.top = feed.scrollTop;
         if (sources.getClientRects().length) state.sourcesTop = sources.scrollTop;
         state.focus = rememberFocus();
@@ -296,4 +303,6 @@ export default function(component) {
         cancelAnimationFrame(restoreFrame);
         observer.disconnect(); listeners.forEach(remove => remove());
     };
+    state.dispose = dispose;
+    return dispose;
 }

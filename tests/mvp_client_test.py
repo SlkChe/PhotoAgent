@@ -2,6 +2,7 @@
 
 import json
 import unittest
+from copy import deepcopy
 from pathlib import Path
 from unittest.mock import patch
 from uuid import UUID
@@ -65,6 +66,32 @@ class MvpClientTest(unittest.TestCase):
             with self.assertRaises(ClientError) as caught:
                 self.client.send(self.token, request, session_id)
         self.assertEqual(caught.exception.code, "request_mismatch")
+
+    def test_poll_checks_session_and_execution_independently(self) -> None:
+        original = self.examples["execution-completed"]
+        session_id = UUID(original["session_id"])
+        execution_id = UUID(original["execution"]["execution_id"])
+        other_id = "00000000-0000-4000-8000-000000000099"
+        for changed, code in (
+            (None, None),
+            ("session", "session_mismatch"),
+            ("execution", "execution_mismatch"),
+        ):
+            with self.subTest(changed=changed):
+                body = deepcopy(original)
+                if changed == "session":
+                    body["session_id"] = body["answer"]["session_id"] = other_id
+                elif changed == "execution":
+                    body["execution"]["execution_id"] = other_id
+                    body["answer"]["execution_id"] = other_id
+                with patch("httpx.Client.request", return_value=httpx.Response(200, json=body)):
+                    if code is None:
+                        result = self.client.execution(self.token, execution_id, session_id)
+                        self.assertEqual(result.session_id, session_id)
+                    else:
+                        with self.assertRaises(ClientError) as caught:
+                            self.client.execution(self.token, execution_id, session_id)
+                        self.assertEqual(caught.exception.code, code)
 
     def test_lost_delivery_restores_without_second_generation(self) -> None:
         empty = SessionSnapshot.model_validate(self.examples["snapshot-empty"])

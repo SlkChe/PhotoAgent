@@ -120,7 +120,11 @@ class IndependentContractAudit(unittest.TestCase):
         token = SecretStr("synthetic-qa-token")
         with patch("httpx.Client.request", return_value=httpx.Response(200, json=foreign)):
             with self.assertRaises(ClientError):
-                client.execution(token, UUID(original["execution"]["execution_id"]))
+                client.execution(
+                    token,
+                    UUID(original["execution"]["execution_id"]),
+                    UUID(original["session_id"]),
+                )
 
 
 class IndependentSessionAudit(unittest.TestCase):
