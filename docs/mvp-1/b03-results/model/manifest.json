@@ -1,0 +1,118 @@
+{
+  "candidate": "model",
+  "created_at": "2026-10-03T12:41:27.511347+00:00",
+  "pydantic": "2.13.5",
+  "corpus_version": "0.3.0",
+  "corpus_sha256": "a71d9cf28d72ccbe187aefbf2376201a855c539e89988df5058e5663c768d2e7",
+  "git_revision": "acb731d8e8d6be726ef4a2286dfea2a64b2887c8",
+  "source_sha256": {
+    "scripts/b03/__init__.py": "cdf7b0b62ee0e72f10ae1da8e2dd893f5860b9f060d31880ba1c226d45e12472",
+    "scripts/b03/baseline.py": "6c3dfebb80622c99ea34c4de05b0d2cb8248a135d28dc88730d4d9691652d61f",
+    "scripts/b03/examples.py": "b378dd68122409e3a1a05a49a1ea47c912823a49f7fcc4d5db6865fb822faf28",
+    "scripts/b03/rescore.py": "d9c6a31759024d4b98592f5c574c77c59d5d28a48235709f28f4cf73c7905fe5",
+    "scripts/b03/run.py": "38a07cd417e8bdeed28107c274c019714389d8f4bdb1f4af078a45d2a860c7ee",
+    "scripts/b03/runtime.py": "d54c4e0592405f7c65ce1516b79fe5a1ceddec1a55554035d043f6799ec8282f",
+    "scripts/b03/schema.py": "2732dd93381f67fff9df70157185ec45ba5d82b8eb01bb3e42d10d0220c823eb",
+    "scripts/b03/scoring.py": "c43fe722b6873678cfd13dd48d6e8935411500b64e468f53214369a9659a7393"
+  },
+  "platform": "macOS-14.8.9-arm64-arm-64bit-Mach-O",
+  "python": "3.14.7",
+  "hardware_model_memory_bytes_cpus": [
+    "MacBookPro18,2",
+    "34359738368",
+    "10"
+  ],
+  "repeats": 3,
+  "warmup_requests": 1,
+  "timeout_seconds": 120,
+  "seed": 42,
+  "temperature": 0,
+  "max_tokens": 768,
+  "parallel_sessions": 3,
+  "cache_prompt": false,
+  "memory_method": "sum RSS runner+server sampled by ps every 100ms; GPU excluded",
+  "percentile_method": "nearest rank; repeated cases are not independent samples",
+  "queue": "at most 3 in-flight; latency measured inside worker incl HTTP/server wait; server queue delay not separately observable",
+  "split": "all",
+  "model_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+  "runtime_sha256": "41df13c126456f8e5fab2057c86a790067a85ea1dfd8fbc0071cc45fbba56262",
+  "runtime_version": "0.5.0-dev b11146 7fe450e19",
+  "startup_ms": 683.1330829299986,
+  "server_command": [
+    ".venv/b03-research/llama-b11146/llama-server",
+    "-m",
+    ".venv/b03-research/Qwen3-0.6B-Q8_0.gguf",
+    "--alias",
+    "b03-qwen",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "8087",
+    "--offline",
+    "-c",
+    "12288",
+    "-np",
+    "3",
+    "-t",
+    "4",
+    "-tb",
+    "4",
+    "--reasoning",
+    "off",
+    "--no-cache-prompt",
+    "--cache-ram",
+    "0"
+  ],
+  "warmup": {
+    "case_id": "T02-001",
+    "mode": "warmup",
+    "repeat": 0,
+    "latency_ms": 999.9017920345068,
+    "output": {
+      "topics": [
+        "technology"
+      ],
+      "intent": "explain",
+      "dialogue_act": "ask",
+      "scope_status": "in_scope",
+      "needs_clarification": false,
+      "response_mode": "focused",
+      "role": "Технический эксперт",
+      "entities": [
+        {
+          "kind": "technology",
+          "label": "фокусное расстояние",
+          "context_id": null
+        }
+      ],
+      "excluded_parts": [],
+      "subquestion_intents": [],
+      "search": "required_for_new_facts",
+      "cloud_generation": "allowed_after_evidence"
+    },
+    "error": null,
+    "metadata": {
+      "usage": {
+        "completion_tokens": 119,
+        "prompt_tokens": 1812,
+        "total_tokens": 1931,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 1812,
+        "prompt_ms": 322.989,
+        "prompt_per_token_ms": 0.17825,
+        "prompt_per_second": 5610.098176718093,
+        "predicted_n": 119,
+        "predicted_ms": 658.123,
+        "predicted_per_token_ms": 5.577313559322034,
+        "predicted_per_second": 179.29779083849067
+      },
+      "finish_reason": "stop",
+      "raw": "{\"topics\": [\"technology\"], \"intent\": \"explain\", \"dialogue_act\": \"ask\", \"scope_status\": \"in_scope\", \"needs_clarification\": false, \"response_mode\": \"focused\", \"role\": \"Технический эксперт\", \"entities\": [{\"kind\": \"technology\", \"label\": \"фокусное расстояние\", \"context_id\": null}], \"excluded_parts\": [], \"subquestion_intents\": [], \"search\": \"required_for_new_facts\", \"cloud_generation\": \"allowed_after_evidence\"}"
+    }
+  }
+}
