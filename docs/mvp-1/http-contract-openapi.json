@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "B-01 HTTP — кандидат для согласования",
-    "version": "mvp1-http-draft.1",
+    "version": "mvp1-http-draft.2",
     "description": "Кандидат, не реализация. См. http-contract-draft.md."
   },
   "servers": [
@@ -2334,6 +2334,313 @@
   },
   "components": {
     "schemas": {
+      "Revision": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "RoleRef": {
+        "additionalProperties": false,
+        "properties": {
+          "role_id": {
+            "description": "Код одного из четырёх профилей A-13",
+            "enum": [
+              "friend",
+              "art_historian",
+              "photo_historian",
+              "photo_technologist"
+            ],
+            "examples": [
+              "friend"
+            ],
+            "title": "Role Id",
+            "type": "string"
+          },
+          "display_name": {
+            "$ref": "#/components/schemas/Text",
+            "description": "Подпись на момент ответа, до 20 Unicode code points",
+            "examples": [
+              "Друг"
+            ],
+            "maxLength": 20
+          }
+        },
+        "required": [
+          "role_id",
+          "display_name"
+        ],
+        "title": "RoleRef",
+        "type": "object"
+      },
+      "SubquestionRole": {
+        "additionalProperties": false,
+        "properties": {
+          "subquestion_id": {
+            "$ref": "#/components/schemas/Text",
+            "description": "ID допустимого подвопроса анализа",
+            "examples": [
+              "q1"
+            ]
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleRef",
+            "description": "Профиль содержания подвопроса, не отдельный агент"
+          }
+        },
+        "required": [
+          "subquestion_id",
+          "role"
+        ],
+        "title": "SubquestionRole",
+        "type": "object"
+      },
+      "Text": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "RoutingDecision": {
+        "additionalProperties": false,
+        "properties": {
+          "session_id": {
+            "description": "Сессия исходного выполнения",
+            "examples": [
+              "00000000-0000-0000-0000-000000000001"
+            ],
+            "format": "uuid",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "request_id": {
+            "description": "Исходный запрос",
+            "examples": [
+              "00000000-0000-0000-0000-000000000002"
+            ],
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          },
+          "execution_id": {
+            "description": "Исходное выполнение",
+            "examples": [
+              "00000000-0000-0000-0000-000000000003"
+            ],
+            "format": "uuid",
+            "title": "Execution Id",
+            "type": "string"
+          },
+          "base_revision": {
+            "$ref": "#/components/schemas/Revision",
+            "description": "Версия контекста анализа",
+            "examples": [
+              0
+            ]
+          },
+          "selected_role": {
+            "$ref": "#/components/schemas/RoleRef",
+            "description": "Ведущий профиль содержания"
+          },
+          "mode": {
+            "description": "Один ведущий либо координация равнозначных задач",
+            "enum": [
+              "single",
+              "consolidated"
+            ],
+            "examples": [
+              "single"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "subquestion_roles": {
+            "description": "Каждый допустимый подвопрос назначен ровно одному профилю",
+            "examples": [
+              []
+            ],
+            "items": {
+              "$ref": "#/components/schemas/SubquestionRole"
+            },
+            "title": "Subquestion Roles",
+            "type": "array"
+          },
+          "author_role": {
+            "$ref": "#/components/schemas/RoleRef",
+            "description": "Будущая неизменная подпись ответа"
+          },
+          "author_basis": {
+            "description": "Основание подписи, не свободные рассуждения",
+            "enum": [
+              "selected",
+              "first_addressed",
+              "coordinator"
+            ],
+            "examples": [
+              "selected"
+            ],
+            "title": "Author Basis",
+            "type": "string"
+          },
+          "addressed_roles": {
+            "description": "Известные адресаты по порядку без повторов/цитат/отрицаний",
+            "examples": [
+              []
+            ],
+            "items": {
+              "$ref": "#/components/schemas/RoleRef"
+            },
+            "title": "Addressed Roles",
+            "type": "array"
+          },
+          "main_subquestion_id": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Text"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Главная задача; null для invitation, общего обзора, консолидации",
+            "examples": [
+              null
+            ]
+          },
+          "route_basis": {
+            "description": "Проверяемое основание выбора",
+            "enum": [
+              "explicit_role",
+              "main_task",
+              "topic",
+              "boundary_friend",
+              "context_rephrase",
+              "equal_tasks",
+              "unknown_role_invitation"
+            ],
+            "examples": [
+              "topic"
+            ],
+            "title": "Route Basis",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id",
+          "request_id",
+          "execution_id",
+          "base_revision",
+          "selected_role",
+          "mode",
+          "subquestion_roles",
+          "author_role",
+          "author_basis",
+          "addressed_roles",
+          "main_subquestion_id",
+          "route_basis"
+        ],
+        "title": "RoutingDecision",
+        "type": "object",
+        "x-internal": true,
+        "examples": [
+          {
+            "session_id": "11111111-1111-4111-8111-111111111111",
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "execution_id": "33333333-3333-4333-8333-333333333333",
+            "base_revision": 0,
+            "selected_role": {
+              "role_id": "photo_historian",
+              "display_name": "Историк фотографии"
+            },
+            "mode": "single",
+            "subquestion_roles": [
+              {
+                "subquestion_id": "q1",
+                "role": {
+                  "role_id": "photo_historian",
+                  "display_name": "Историк фотографии"
+                }
+              }
+            ],
+            "author_role": {
+              "role_id": "photo_historian",
+              "display_name": "Историк фотографии"
+            },
+            "author_basis": "selected",
+            "addressed_roles": [],
+            "main_subquestion_id": "q1",
+            "route_basis": "topic"
+          },
+          {
+            "session_id": "11111111-1111-4111-8111-111111111111",
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "execution_id": "33333333-3333-4333-8333-333333333333",
+            "base_revision": 0,
+            "selected_role": {
+              "role_id": "photo_historian",
+              "display_name": "Историк фотографии"
+            },
+            "mode": "single",
+            "subquestion_roles": [
+              {
+                "subquestion_id": "q1",
+                "role": {
+                  "role_id": "photo_historian",
+                  "display_name": "Историк фотографии"
+                }
+              }
+            ],
+            "author_role": {
+              "role_id": "art_historian",
+              "display_name": "Искусствовед"
+            },
+            "author_basis": "first_addressed",
+            "addressed_roles": [
+              {
+                "role_id": "art_historian",
+                "display_name": "Искусствовед"
+              },
+              {
+                "role_id": "photo_historian",
+                "display_name": "Историк фотографии"
+              }
+            ],
+            "main_subquestion_id": "q1",
+            "route_basis": "main_task"
+          },
+          {
+            "session_id": "11111111-1111-4111-8111-111111111111",
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "execution_id": "33333333-3333-4333-8333-333333333333",
+            "base_revision": 0,
+            "selected_role": {
+              "role_id": "friend",
+              "display_name": "Друг"
+            },
+            "mode": "consolidated",
+            "subquestion_roles": [
+              {
+                "subquestion_id": "q1",
+                "role": {
+                  "role_id": "photo_historian",
+                  "display_name": "Историк фотографии"
+                }
+              },
+              {
+                "subquestion_id": "q2",
+                "role": {
+                  "role_id": "photo_technologist",
+                  "display_name": "Технический эксперт"
+                }
+              }
+            ],
+            "author_role": {
+              "role_id": "friend",
+              "display_name": "Друг"
+            },
+            "author_basis": "coordinator",
+            "addressed_roles": [],
+            "main_subquestion_id": null,
+            "route_basis": "equal_tasks"
+          }
+        ]
+      },
       "OperationRequest": {
         "additionalProperties": false,
         "properties": {
@@ -2397,10 +2704,6 @@
       "Locale": {
         "const": "ru",
         "type": "string"
-      },
-      "Revision": {
-        "minimum": 0,
-        "type": "integer"
       },
       "SettingsValue": {
         "additionalProperties": false,
@@ -2492,10 +2795,10 @@
         "additionalProperties": false,
         "properties": {
           "contract_version": {
-            "const": "mvp1-http-draft.1",
+            "const": "mvp1-http-draft.2",
             "description": "Несогласованный HTTP-конверт; не версия предметного Answer",
             "examples": [
-              "mvp1-http-draft.1"
+              "mvp1-http-draft.2"
             ],
             "title": "Contract Version",
             "type": "string"
@@ -2531,7 +2834,7 @@
         "type": "object",
         "examples": [
           {
-            "contract_version": "mvp1-http-draft.1",
+            "contract_version": "mvp1-http-draft.2",
             "request_id": "00000000-0000-0000-0000-000000000082",
             "settings_revision": 1,
             "settings": {
@@ -2541,10 +2844,6 @@
             }
           }
         ]
-      },
-      "Text": {
-        "minLength": 1,
-        "type": "string"
       },
       "MessageRequest": {
         "additionalProperties": false,
@@ -2662,10 +2961,10 @@
         "additionalProperties": false,
         "properties": {
           "contract_version": {
-            "const": "mvp1-http-draft.1",
+            "const": "mvp1-http-draft.2",
             "description": "Несогласованный HTTP-конверт; не версия предметного Answer",
             "examples": [
-              "mvp1-http-draft.1"
+              "mvp1-http-draft.2"
             ],
             "title": "Contract Version",
             "type": "string"
@@ -2703,7 +3002,7 @@
         "type": "object",
         "examples": [
           {
-            "contract_version": "mvp1-http-draft.1",
+            "contract_version": "mvp1-http-draft.2",
             "session_id": null,
             "csrf_token": "synthetic-csrf"
           }
@@ -2867,10 +3166,10 @@
         "additionalProperties": false,
         "properties": {
           "contract_version": {
-            "const": "mvp1-http-draft.1",
+            "const": "mvp1-http-draft.2",
             "description": "Несогласованный HTTP-конверт; не версия предметного Answer",
             "examples": [
-              "mvp1-http-draft.1"
+              "mvp1-http-draft.2"
             ],
             "title": "Contract Version",
             "type": "string"
@@ -2898,7 +3197,7 @@
         "type": "object",
         "examples": [
           {
-            "contract_version": "mvp1-http-draft.1",
+            "contract_version": "mvp1-http-draft.2",
             "request_id": "00000000-0000-0000-0000-00000000008c",
             "state": {
               "answer_id": "66666666-6666-4666-8666-666666666666",
@@ -2952,10 +3251,10 @@
         "additionalProperties": false,
         "properties": {
           "contract_version": {
-            "const": "mvp1-http-draft.1",
+            "const": "mvp1-http-draft.2",
             "description": "Несогласованный HTTP-конверт; не версия предметного Answer",
             "examples": [
-              "mvp1-http-draft.1"
+              "mvp1-http-draft.2"
             ],
             "title": "Contract Version",
             "type": "string"
@@ -3023,7 +3322,7 @@
         "type": "object",
         "examples": [
           {
-            "contract_version": "mvp1-http-draft.1",
+            "contract_version": "mvp1-http-draft.2",
             "export_id": "00000000-0000-0000-0000-000000000097",
             "snapshot_revision": 3,
             "expires_at": "2026-09-24T10:01:00Z",
@@ -3149,10 +3448,10 @@
         "additionalProperties": false,
         "properties": {
           "contract_version": {
-            "const": "mvp1-http-draft.1",
+            "const": "mvp1-http-draft.2",
             "description": "Несогласованный HTTP-конверт; не версия предметного Answer",
             "examples": [
-              "mvp1-http-draft.1"
+              "mvp1-http-draft.2"
             ],
             "title": "Contract Version",
             "type": "string"
@@ -3202,7 +3501,7 @@
         "type": "object",
         "examples": [
           {
-            "contract_version": "mvp1-http-draft.1",
+            "contract_version": "mvp1-http-draft.2",
             "generated_at": "2026-09-24T10:00:00Z",
             "from_date": "2026-09-24",
             "to_date": "2026-09-24",
@@ -3493,7 +3792,7 @@
           "locator": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/Text"
               },
               {
                 "type": "null"
@@ -3502,8 +3801,7 @@
             "description": "Страница или раздел",
             "examples": [
               null
-            ],
-            "title": "Locator"
+            ]
           }
         },
         "required": [
@@ -3528,7 +3826,7 @@
           "heading": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/Text"
               },
               {
                 "type": "null"
@@ -3537,8 +3835,7 @@
             "description": "Необязательный заголовок",
             "examples": [
               null
-            ],
-            "title": "Heading"
+            ]
           },
           "text": {
             "$ref": "#/components/schemas/Text",
@@ -3597,7 +3894,7 @@
           "author_or_organization": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/Text"
               },
               {
                 "type": "null"
@@ -3606,13 +3903,12 @@
             "description": "Автор или организация",
             "examples": [
               null
-            ],
-            "title": "Author Or Organization"
+            ]
           },
           "published_date": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/Text"
               },
               {
                 "type": "null"
@@ -3622,8 +3918,7 @@
             "examples": [
               "2000",
               null
-            ],
-            "title": "Published Date"
+            ]
           },
           "retrieved_at": {
             "$ref": "#/components/schemas/UtcDatetime",
@@ -3937,6 +4232,20 @@
               "completed"
             ]
           },
+          "selected_role": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RoleRef"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Ведущий профиль; null до выбора, не обязательно автор ответа",
+            "examples": [
+              null
+            ]
+          },
           "answer_id": {
             "anyOf": [
               {
@@ -3972,6 +4281,7 @@
           "request_id",
           "execution_id",
           "status",
+          "selected_role",
           "answer_id",
           "error"
         ],
@@ -4040,32 +4350,6 @@
           "options"
         ],
         "title": "PendingClarification",
-        "type": "object"
-      },
-      "RoleRef": {
-        "additionalProperties": false,
-        "properties": {
-          "role_id": {
-            "$ref": "#/components/schemas/Text",
-            "description": "Стабильный ID из реестра ролей; список требует A-13",
-            "examples": [
-              "friend"
-            ]
-          },
-          "display_name": {
-            "$ref": "#/components/schemas/Text",
-            "description": "Подпись на момент ответа, до 20 Unicode code points",
-            "examples": [
-              "Друг"
-            ],
-            "maxLength": 20
-          }
-        },
-        "required": [
-          "role_id",
-          "display_name"
-        ],
-        "title": "RoleRef",
         "type": "object"
       },
       "SourceCard": {
@@ -4211,10 +4495,10 @@
         "additionalProperties": false,
         "properties": {
           "contract_version": {
-            "const": "mvp1-http-draft.1",
+            "const": "mvp1-http-draft.2",
             "description": "Несогласованный HTTP-конверт; не версия предметного Answer",
             "examples": [
-              "mvp1-http-draft.1"
+              "mvp1-http-draft.2"
             ],
             "title": "Contract Version",
             "type": "string"
@@ -4372,7 +4656,7 @@
         "type": "object",
         "examples": [
           {
-            "contract_version": "mvp1-http-draft.1",
+            "contract_version": "mvp1-http-draft.2",
             "session_id": "11111111-1111-4111-8111-111111111111",
             "revision": 3,
             "last_activity_at": "2026-09-24T10:00:00Z",
@@ -4472,7 +4756,11 @@
                 "execution_id": "33333333-3333-4333-8333-333333333333",
                 "status": "completed",
                 "answer_id": "66666666-6666-4666-8666-666666666666",
-                "error": null
+                "error": null,
+                "selected_role": {
+                  "role_id": "friend",
+                  "display_name": "Друг"
+                }
               }
             ],
             "source_cards": [
@@ -4514,7 +4802,7 @@
             }
           },
           {
-            "contract_version": "mvp1-http-draft.1",
+            "contract_version": "mvp1-http-draft.2",
             "session_id": "11111111-1111-4111-8111-111111111111",
             "revision": 0,
             "last_activity_at": "2026-09-24T10:00:00Z",
@@ -4544,7 +4832,7 @@
             }
           },
           {
-            "contract_version": "mvp1-http-draft.1",
+            "contract_version": "mvp1-http-draft.2",
             "session_id": "11111111-1111-4111-8111-111111111111",
             "revision": 1,
             "last_activity_at": "2026-09-24T10:00:00Z",
@@ -4583,7 +4871,11 @@
                 "execution_id": "33333333-3333-4333-8333-333333333333",
                 "status": "searching",
                 "answer_id": null,
-                "error": null
+                "error": null,
+                "selected_role": {
+                  "role_id": "friend",
+                  "display_name": "Друг"
+                }
               }
             ],
             "source_cards": [],
@@ -4601,10 +4893,10 @@
         "additionalProperties": false,
         "properties": {
           "contract_version": {
-            "const": "mvp1-http-draft.1",
+            "const": "mvp1-http-draft.2",
             "description": "Несогласованный HTTP-конверт; не версия предметного Answer",
             "examples": [
-              "mvp1-http-draft.1"
+              "mvp1-http-draft.2"
             ],
             "title": "Contract Version",
             "type": "string"
@@ -4662,14 +4954,18 @@
         "type": "object",
         "examples": [
           {
-            "contract_version": "mvp1-http-draft.1",
+            "contract_version": "mvp1-http-draft.2",
             "session_id": "11111111-1111-4111-8111-111111111111",
             "execution": {
               "request_id": "22222222-2222-4222-8222-222222222222",
               "execution_id": "33333333-3333-4333-8333-333333333333",
               "status": "completed",
               "answer_id": "66666666-6666-4666-8666-666666666666",
-              "error": null
+              "error": null,
+              "selected_role": {
+                "role_id": "friend",
+                "display_name": "Друг"
+              }
             },
             "answer": {
               "schema_version": "1.1",
@@ -4729,7 +5025,7 @@
             }
           },
           {
-            "contract_version": "mvp1-http-draft.1",
+            "contract_version": "mvp1-http-draft.2",
             "session_id": "11111111-1111-4111-8111-111111111111",
             "execution": {
               "request_id": "22222222-2222-4222-8222-222222222222",
@@ -4740,10 +5036,82 @@
                 "code": "provider_error",
                 "message": "Источник временно недоступен",
                 "retryable": true
-              }
+              },
+              "selected_role": null
             },
             "answer": null,
             "author": null
+          },
+          {
+            "contract_version": "mvp1-http-draft.2",
+            "session_id": "11111111-1111-4111-8111-111111111111",
+            "execution": {
+              "request_id": "22222222-2222-4222-8222-222222222222",
+              "execution_id": "33333333-3333-4333-8333-333333333333",
+              "status": "completed",
+              "answer_id": "66666666-6666-4666-8666-666666666666",
+              "error": null,
+              "selected_role": {
+                "role_id": "photo_historian",
+                "display_name": "Историк фотографии"
+              }
+            },
+            "answer": {
+              "schema_version": "1.1",
+              "session_id": "11111111-1111-4111-8111-111111111111",
+              "request_id": "22222222-2222-4222-8222-222222222222",
+              "execution_id": "33333333-3333-4333-8333-333333333333",
+              "answer_id": "66666666-6666-4666-8666-666666666666",
+              "kind": "answer",
+              "completeness": "complete",
+              "direct_answer": "Учебная серия создана в 2000 году.",
+              "sections": [],
+              "claims": [
+                {
+                  "claim_id": "c1",
+                  "statement": "Учебная серия создана в 2000 году.",
+                  "status": "supported",
+                  "fragment_ids": [
+                    "f1"
+                  ]
+                }
+              ],
+              "fragments": [
+                {
+                  "fragment_id": "f1",
+                  "source_id": "s1",
+                  "text": "Учебная серия создана в 2000 году.",
+                  "locator": "Учебная запись 1"
+                }
+              ],
+              "sources": [
+                {
+                  "source_id": "s1",
+                  "url": "https://example.org/fixture-series",
+                  "title": "Синтетический каталог для примера контракта",
+                  "author_or_organization": "Учебный источник",
+                  "published_date": null,
+                  "retrieved_at": "2026-09-21T12:00:01Z",
+                  "source_type": "primary",
+                  "access_mode": "excerpt",
+                  "usage_constraints": [
+                    "Синтетический пример, не исторический источник"
+                  ]
+                }
+              ],
+              "limitations": [],
+              "clarification": null,
+              "follow_ups": [],
+              "style": {
+                "detail": "brief",
+                "level": "beginner"
+              },
+              "locale": "ru"
+            },
+            "author": {
+              "role_id": "art_historian",
+              "display_name": "Искусствовед"
+            }
           }
         ]
       },

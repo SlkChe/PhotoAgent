@@ -12,9 +12,9 @@ from shared.session_actions import SessionActionRequest as SessionActionRequest
 
 
 class DraftEnvelope(ContractModel):
-    contract_version: Literal["mvp1-http-draft.1"] = Field(
+    contract_version: Literal["mvp1-http-draft.2"] = Field(
         description="Несогласованный HTTP-конверт; не версия предметного Answer",
-        examples=["mvp1-http-draft.1"],
+        examples=["mvp1-http-draft.2"],
     )
 
 
@@ -72,8 +72,8 @@ class BrowserContext(DraftEnvelope):
 
 
 class RoleRef(ContractModel):
-    role_id: Text = Field(
-        description="Стабильный ID из реестра ролей; список требует A-13", examples=["friend"]
+    role_id: Literal["friend", "art_historian", "photo_historian", "photo_technologist"] = Field(
+        description="Код одного из четырёх профилей A-13", examples=["friend"]
     )
     display_name: Text = Field(
         min_length=1,

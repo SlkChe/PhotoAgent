@@ -7,10 +7,12 @@ from pydantic import BaseModel
 
 from shared.http_draft import operations as op
 from shared.http_draft import session as view
+from shared.http_draft.routing import RoutingDecision
 from shared.mvp_contracts.execution import ApiError, ExecutionAccepted
 
 DESTINATION = Path("docs/mvp-1/http-contract-openapi.json")
 MODELS = (
+    RoutingDecision,
     op.OperationRequest,
     op.SessionActionRequest,
     op.SettingsUpdate,
@@ -331,6 +333,7 @@ def build_contract() -> dict[str, object]:
         schema = model.model_json_schema(ref_template="#/components/schemas/{model}")
         schemas.update(schema.pop("$defs", {}))
         schemas[model.__name__] = schema
+    schemas["RoutingDecision"]["x-internal"] = True
     attach_examples(schemas)
     paths = browser_paths() | session_paths() | feedback_paths() | export_paths()
     paths["/mvp1/owner/statistics"] = {
@@ -365,7 +368,7 @@ def build_contract() -> dict[str, object]:
         "openapi": "3.1.0",
         "info": {
             "title": "B-01 HTTP — кандидат для согласования",
-            "version": "mvp1-http-draft.1",
+            "version": "mvp1-http-draft.2",
             "description": "Кандидат, не реализация. См. http-contract-draft.md.",
         },
         "servers": [{"url": "https://contract-not-deployed.invalid"}],

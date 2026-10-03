@@ -24,7 +24,7 @@ class Entity(ContractModel):
     )
     label: Text = Field(description="Название сущности", examples=["Автор"])
     aliases: list[str] = Field(description="Известные варианты имени", examples=[[]])
-    external_id: str | None = Field(description="ID внешнего справочника", examples=[None])
+    external_id: Text | None = Field(description="ID внешнего справочника", examples=[None])
 
 
 class TimeScope(ContractModel):
@@ -92,7 +92,7 @@ class ContextUpdate(ContractModel):
     )
     time_scope: TimeScope | None = Field(description="Временной контекст", examples=[None])
     geography: list[str] = Field(description="Явная география вопроса", examples=[[]])
-    pending_action: str | None = Field(description="Ожидаемое действие", examples=[None])
+    pending_action: Text | None = Field(description="Ожидаемое действие", examples=[None])
 
 
 class QueryAnalysis(Envelope):

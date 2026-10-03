@@ -20,7 +20,7 @@ class AnswerStyle(ContractModel):
 
 class AnswerSection(ContractModel):
     section_id: Text = Field(description="ID раздела ответа", examples=["section-1"])
-    heading: str | None = Field(description="Необязательный заголовок", examples=[None])
+    heading: Text | None = Field(description="Необязательный заголовок", examples=[None])
     text: Text = Field(description="Текст раздела", examples=["Исторический контекст"])
     claim_ids: list[Text] = Field(description="Утверждения раздела", examples=[["c1"]])
 

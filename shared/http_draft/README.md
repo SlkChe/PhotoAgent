@@ -6,7 +6,7 @@
 `operations.py` — тела мутаций, роли, отзывы, экспорт, статистика;
 `session.py` — история, snapshot, выполнение; `validation.py` — связи примеров.
 Использует утверждённые Answer/ApiError/ExecutionAccepted без изменения их схем.
-Новый HTTP-конверт имеет отдельный contract_version=mvp1-http-draft.1.
+Новый HTTP-конверт имеет отдельный contract_version=mvp1-http-draft.2.
 
 Экспорт: `PYTHONPATH=. .venv/runtime-env/bin/python scripts/build_http_contract.py`.
 Готовый документ: [OpenAPI](../../docs/mvp-1/http-contract-openapi.json).
@@ -19,3 +19,10 @@ Pydantic не заменяет авторизацию, проверку пред
 Принятое тело clear/opened экспортируется из `shared/session_actions.py`;
 эта общая модель используется также экспериментальным runtime B-15. Остальные
 модели пакета остаются кандидатом. Результаты — [B-15](../../docs/mvp-1/b15-checks.md).
+
+A-13 от 2026-10-03: ExecutionSummary.selected_role — ведущий профиль, author —
+сохранённая подпись; они могут различаться. routing.py содержит внутренний
+RoutingDecision и сверку анализа/публикации, не новый публичный endpoint.
+В OpenAPI схема отмечена x-internal, в SessionSnapshot/ExecutionView её нет.
+Draft.2 несовместим с draft.1: обязательное поле selected_role и закрытый реестр
+четырёх кодов роли требуют синхронного обновления потребителей.

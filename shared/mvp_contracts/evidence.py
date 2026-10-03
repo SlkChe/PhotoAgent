@@ -14,8 +14,10 @@ class AnswerSource(ContractModel):
         description="Точный URL HTTP/HTTPS без нормализации", examples=["https://example.org/photo"]
     )
     title: Text = Field(description="Название материала", examples=["Каталог фотографий"])
-    author_or_organization: str | None = Field(description="Автор или организация", examples=[None])
-    published_date: str | None = Field(
+    author_or_organization: Text | None = Field(
+        description="Автор или организация", examples=[None]
+    )
+    published_date: Text | None = Field(
         description="Дата публикации с доступной точностью", examples=["2000", None]
     )
     retrieved_at: UtcDatetime = Field(
@@ -34,7 +36,7 @@ class AnswerSource(ContractModel):
 
 class Source(AnswerSource):
     provider_id: Text = Field(description="Технический ID адаптера", examples=["fixture_wiki"])
-    origin_group: str | None = Field(
+    origin_group: Text | None = Field(
         description="Общее происхождение; null не означает независимость", examples=[None]
     )
 
@@ -45,7 +47,7 @@ class AnswerFragment(ContractModel):
     text: Text = Field(
         description="Оригинальный полученный текст", examples=["Серия создана в 2000 году."]
     )
-    locator: str | None = Field(description="Страница или раздел", examples=[None])
+    locator: Text | None = Field(description="Страница или раздел", examples=[None])
 
 
 class Fragment(AnswerFragment):
@@ -86,7 +88,7 @@ class Conflict(ContractModel):
 
 
 class Gap(ContractModel):
-    subquestion_id: str | None = Field(
+    subquestion_id: Text | None = Field(
         description="Подвопрос или общая проблема", examples=["q1", None]
     )
     reason: Literal[

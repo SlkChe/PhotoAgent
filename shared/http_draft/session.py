@@ -51,6 +51,10 @@ class ExecutionSummary(ContractModel):
         description="ID выполнения", examples=["33333333-3333-4333-8333-333333333333"]
     )
     status: Stage = Field(description="Безопасная стадия для UI", examples=["completed"])
+    selected_role: RoleRef | None = Field(
+        description="Ведущий профиль; null до выбора, не обязательно автор ответа",
+        examples=[None],
+    )
     answer_id: UUID | None = Field(description="Ответ только для completed", examples=[None])
     error: DraftExecutionError | None = Field(
         description="Ошибка только для failed", examples=[None]
@@ -62,6 +66,15 @@ class ExecutionSummary(ContractModel):
             raise ValueError("answer_id требуется только для completed")
         if (self.status == "failed") != (self.error is not None):
             raise ValueError("error требуется только для failed")
+        if self.status in {
+            "searching",
+            "building_evidence",
+            "generating",
+            "validating",
+            "completed",
+        }:
+            if self.selected_role is None:
+                raise ValueError("Для этой стадии нужен выбранный ведущий профиль")
         return self
 
 
